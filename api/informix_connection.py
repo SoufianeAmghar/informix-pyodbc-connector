@@ -1,21 +1,26 @@
 # informix_connection.py
 import pyodbc
+from dotenv import load_dotenv
+from loguru import logger
 import os
 
+# Load environment variables from .env file
+load_dotenv()
+
 # Resolve the relative path to an absolute path
-driver_path = os.path.abspath("linux_64_driver_lib/ODBC_64bit/lib/ddifcl28.so")
-print(driver_path)
+driver_path = os.path.abspath(os.getenv('INFORMIX_DRIVER'))
 
 # Connection string using the driver name
 conn_str = (
-        f"DRIVER={driver_path};"
-        "DATABASE=cmr;"
-        "HOSTNAME=localhost;"
-        "PORT=9088;"
-        "PROTOCOL=TCPIP;"
-        "UID=informix;"
-        "PWD=mysecretpassword;"
-    )
+    f"DRIVER={driver_path};"
+    f"DATABASE={os.getenv('INFORMIX_DATABASE')};"
+    f"HOSTNAME={os.getenv('INFORMIX_HOSTNAME')};"
+    f"PORT={os.getenv('INFORMIX_PORT')};"
+    f"PROTOCOL={os.getenv('INFORMIX_PROTOCOL')};"
+    f"UID={os.getenv('INFORMIX_UID')};"
+    f"PWD={os.getenv('INFORMIX_PWD')};"
+)
+
 
 def create_connection():
     """
@@ -23,11 +28,10 @@ def create_connection():
     """
     try:
         conn = pyodbc.connect(conn_str)
-        print("Connection successful!")
+        logger.info("Connected successfully !")
         conn.setdecoding(pyodbc.SQL_CHAR, encoding="utf-8")
         conn.setdecoding(pyodbc.SQL_WCHAR, encoding="utf-8")
         return conn
     except Exception as e:
-        print(f"Connection failed: {e}")
+        logger.error(f"Connection failed: {e}")
         return None
-
