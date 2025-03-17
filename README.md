@@ -27,12 +27,7 @@ First, you will need to install the followings:
 ```sh
 echo $SHELL
 ```
-        Common shells:
-
-        
-        Bash: /bin/bash
-
-        Zsh: /bin/zsh
+Common shells are: (Bash- /bin/bash & Zsh- /bin/zsh)
 
 3. Add LD_LIBRARY_PATH to the Shell Configuration File after you have your driver inside the api folder. 
 Change the command based on your absolute path and number of bits (32/64) of your machine
