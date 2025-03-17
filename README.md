@@ -15,6 +15,7 @@ First, you will need to install the followings:
 ### This setup is only for non Linux x64 users :
 1- If you don't have a Linux x64 distribution, go to the following page to download and install the driver for your operating system along with it's requirements :
 (https://www.progress.com/odbc/ibm-informix)
+
 2- Follow their documentation to setup the driver for your operating system
 
 ### For Linux users, make sure you run the following commands :
