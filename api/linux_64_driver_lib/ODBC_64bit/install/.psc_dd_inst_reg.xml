@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<progress_datadirect_install_registry install_date="2025-03-17T13:17:12.097Z" last_modified="2025-03-17T13:17:42.892Z" type="product" version="2.0.0.0">
+    <products>
+        <product bitness="64" id="2728728f-1f3b-11b2-9a65-d94ce8c11052" location="/home/soufiane/Progress/DataDirect/ODBC_64bit" name="DataDirect for ODBC - 64 bit" version="3.0.0.0">
+            <features>
+                <feature name="Common Files" short_name="odbc_common_linux64">
+                    <details install_type="EVAL"/>
+                    <components id="375e12e5-1f17-11b2-85e6-b07e64a34e82" version="8.0.0.0"/>
+                </feature>
+                <feature name="Common Driver Manager Files" short_name="odbc_dm_linux64">
+                    <details install_type="EVAL"/>
+                    <components id="27884a2b-1f30-11b2-8b5d-9b7c1f6c615e" version="8.0.0.0"/>
+                </feature>
+                <feature name="Informix Wire Protocol" short_name="informix">
+                    <details install_type="EVAL"/>
+                    <components id="3e137af3-1f1f-11b2-8fab-98bef360ca96" version="8.0.2.0"/>
+                </feature>
+            </features>
+            <jvm location="/usr/lib/jvm/java-11-openjdk-amd64" version="11"/>
+            <install_log location="/home/soufiane/Progress/DataDirect/ODBC_64bit/install/logs"/>
+            <uninstaller location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall" name="uninstall_ODBC_64bit.exe"/>
+        </product>
+    </products>
+</progress_datadirect_install_registry>

@@ -1,0 +1,2366 @@
+     FIXES.TXT
+     Progress(R) DataDirect(R)
+     Progress DataDirect for ODBC Drivers
+     Release 8.0
+     December 2024
+
+
+This FIXES.TXT file contains information for Progress(R) DataDirect  
+for ODBC Drivers, which includes the following products:
+* Progress DataDirect for ODBC Drivers (32- and 64-bit)
+* Progress DataDirect Connect for ODBC
+* Progress DataDirect Connect64 for ODBC
+* Progress DataDirect Connect XE (Extended Edition) for ODBC
+* Progress DataDirect Connect64 XE for ODBC
+
+* You must have a component build number in the driver version string
+that is equal to or higher than the one listed in this file to have the 
+fix for the driver failure.
+
+* You must have a component build number in the UNIX Driver Manager (DM) 
+version string that is equal to or higher than the ones listed in this 
+file to have the fix for the Driver Manager failure. The Driver Manager 
+files containing the version string are as follows:
+
+  On AIX: odbc.so
+  On HP-UX PA-RISC: libodbc.sl
+  On Solaris, Linux, and HP-UX Itanium: libodbc.so
+
+* You must have a component build number in the ICU version string that 
+is equal to or higher than the one listed in this file to have the fix 
+for the ICU failure. On Windows, this file is xxICUnn.DLL, and on UNIX, 
+libxxicunn.yy, where  is iv for the 32-bit library and dd for the 
+64-bit library, nn represents the driver level number, and yy represents 
+the appropriate file name extension on UNIX.
+
+All drivers, except the flat-file and Salesforce drivers have a 
+version string of the format:
+
+XX.YY.ZZZZ(bAAAA, UBBBB)
+or
+XX.YY.ZZZZ(BAAAA, UBBBB)
+
+All flat-file drivers have a version string of the format:
+
+XX.YY.ZZZZ(bAAAA, uBBBB, FCCCC)
+
+The Salesforce driver has a version string of the format:
+
+XX.YY.ZZZZ(bAAAA, UBBBB, SDDDDDD)
+
+The MongoDB and Oracle Service Cloud drivers have a version string of the format:
+
+XX.YY.ZZZZ(bAAAA, UBBBB, JDDDDDD)
+
+The Driver Manager on UNIX and Linux has a version string of the format:
+
+XX.YY.ZZZZ(UBBBB)
+
+The component for the Unicode conversion tables (ICU) has a version 
+string of the format:
+
+XX.YY.ZZZZ
+
+The Schema Definition Tool has a version string of the format:
+
+EEEEEE
+
+where:
+
+XX     is the major version of the product 
+YY     is the minor version of the product
+ZZZZ   is the build number of the driver or DM component 
+AAAA   is the build number of the driver's bas component 
+BBBB   is the build number of the driver's or DM's utl component 
+CCCC   is the build number of a flat-file driver's flt component
+DDDDDD is the build number of the Salesforce, MongoDB or OSC driver's jar component
+EEEEEE is the build number of the Schema Definition Tool (schematool.jar)
+
+For example for a flat-file driver, 8.01.0012 (b0001, u0002, F0001)
+                                          |__|  |___|  |___|  |___|
+                                         Driver  Bas    Utl    Flt
+
+This fixes.txt file lists the build number of the component(s) 
+that changed to resolve the failure. For example, if a driver's bas 
+component changed, you may see b0001. 
+
+The fixes.txt file lists both the DM component number and the utl 
+component number for a DM failure.
+
+On Windows XP and 2003, you can check the driver version string through 
+the properties of the driver DLL. Right-click the driver DLL and select 
+Properties. The Properties dialog box appears. On the Version tab, 
+click File Version in the "Other version information" list box.
+
+On all supported Windows platforms, you can also check the version
+string of the drivers from the ODBC Administrator, on the About tab.
+
+On UNIX, you can check the version string by using the ivtestlib or 
+ddtestlib utility shipped with the product. This utility is located in 
+<install_directory>/bin. Use the following command line:
+
+ivtestlib <shared_object>
+
+For example, for the Spark SQL Wire Protocol driver on Solaris:
+
+>ivtestlib ivspark28.so
+>
+>08.01.0001 (B0002, U0001)
+
+Note that the Spark SQL Wire Protocol driver is not a flat-file driver; 
+therefore, there is no flt component listed in the example.
+
+For example, for the Driver Manager on Solaris:
+
+>ivtestlib libodbc.so
+>
+>08.01.0001 (U0001)
+
+For example, for ICU on Solaris:
+
+>ivtestlib libivicu28.so
+>
+>08.01.0001
+
+NOTE: On Solaris, AIX, and Linux, the full path to the driver does not 
+have to be specified for ivtestlib and ddtestlib. The HP-UX version of 
+ivtestlib and ddtestlib, however, requires the full path.
+
+
+     Modifications Since 8.0.1
+
+Issues are listed into sections, grouped by component name, 
+beginning with "All drivers," followed by individual drivers,
+the UNIX Driver Manager, and ICU issues.
+
+DRIVER, BAS, UTL, FLT, SCHEMA TOOL FAILURES RESOLVED
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| Failure   |             	| Build Number of:      
+| Number    | Driver      	|Driver|  Bas  |  Utl  |  Flt  | Java jar component |
+-----------------------------------------------------------------------------------------
+[Start of content]
+=======
+|XDBC-64035 | Google Analytics 4| 0229 | B3109 | U3071 |       |   J000439     	|                         
+The ODBC.ini file installed as part of the alldrivers package for Linux does
+not contain the DSN configuration details for the Google Analytics 4 driver.
+-----------------------------------------------------------------------------------------
+|XDBC-63973 | GoogleBigQuery   | 774  | B3060 | U3020 |       |       J002229 	|                         
+When UseStreamingInsert connection option was enabled (UseStreamingInsert=1), 
+the driver failed to use the streaming API for batch inserts when rerunning the 
+same job, which resulted in a significant performance issue.
+-----------------------------------------------------------------------------------------
+|XDBC-62929 | OracleWP    	   | 3645 | B3037 | U2992 |       |              	|                         
+When BULK MODE was enabled, the driver failed to insert the Varchar2 (n CHAR)
+data that exceeded the precision.
+-----------------------------------------------------------------------------------------
+|XDBC-59361 | OracleWP    	   | 3645 | B3037 | U2992 |       |              	|                         
+When attempting to fetch rows larger than 2GB, the driver returned the 
+following error: “fetch row count exceeds MINSWORDMAXVAL.”
+-----------------------------------------------------------------------------------------
+|XDBC-61711 | Snowflake    	   | 0525 | B3037 | U2992 |       |   J001654      	|                         
+When attempting to fetch metadata without specifying the database name, 
+the driver took a long time to return the metadata.
+-----------------------------------------------------------------------------------------
+|XDBC-62072 | DB2           | 1014 | B3001| U2955 |       |         |              
+On Windows platforms, the driver failed to connect with the following error 
+when attempting to use custom SSL libraries: “Unable to determine the OpenSSL 
+version library_name.dll.”
+-----------------------------------------------------------------------------------------
+|XDBC-54772 |    Salesforce    | 0892 | B3001 | U2955 |       |      J002957       
+The driver threw an exception when attempting to execute a query to fetch 
+a report (stored procedure).
+-----------------------------------------------------------------------------------------
+|XDBC-50028 |    OracleWP      | 3620 | B2977 | U2932 |       |                    |
+The driver has been updated to resolve a potential security vulnerability detected 
+in a BinSkim scan.
+-----------------------------------------------------------------------------------------
+|XDBC-41552 |    OracleWP      | 3620 | B2977 | U2932 |       |                    |
+When Kerberos Authentication was enabled, build 08.02.2584 of the driver failed to 
+connect to an Oracle database server that had the July 2021 (or more recent) 
+Critical Security Patch applied.
+-----------------------------------------------------------------------------------------
+|XDBC-62025 |    OpenEdge      | 0293 | B2980 | U2935 |       |                    |
+When attempting to authenticate using a password longer than 35 characters, 
+the driver returned an error.
+-----------------------------------------------------------------------------------------
+|XDBC-62102 |    OpenEdge      | 0293 | B2980 | U2935 |       |                    |
+When attempting to use custom OpenSSL libraries, which were specified using the 
+SSLLibName and CryptoLibName options, the driver returned the following error: 
+"Unable to determine the OpenSSL version for libssl-3-x64.dll.";
+-----------------------------------------------------------------------------------------
+|XDBC-61749 | SQLServer | 2008  | B3001 | U2955 |       |        |
+The driver returned incorrect parameter descriptions when attempting to run a query 
+containing two untyped parameters.
+-----------------------------------------------------------------------------------------
+|XDBC-63249 | SQLServer | 2008  | B3001 | U2955 |       |        |
+A crash occurred when the application attempted to retrieve diagnostic records for 
+SQLCancel while canceling a function on another thread.
+-----------------------------------------------------------------------------------------
+|XDBC-62087 | Hive | 1358  | B2835 | U2792 |       |        |
+When attempting to use custom OpenSSL libraries, which were specified using
+the SSLLibName and CryptoLibName options, the driver returned the following 
+error: “Unable to determine the OpenSSL version for libssl-3-x64.dll.”
+-----------------------------------------------------------------------------------------
+|XDBC-61711 | Snowflake     | 0509 | B2772 | U2712 |       |   J001590      	|                         
+When attempting to fetch metadata without specifying the database name, 
+the driver took a long time to return the metadata.
+-----------------------------------------------------------------------------------------
+|XDBC-59288 | GoogleBigQuery         | 0709 | B2774 | U2714 |       |   J002185      |                         
+The driver was unable to use the Google BigQuery Streaming API when executing INSERT 
+statements containing table, dataset, or project names that included a backtick (`) 
+character.
+-----------------------------------------------------------------------------------------
+|XDBC-63213 | GoogleBigQuery         | 0709 | B2774 | U2714 |       |    J002185     |                         
+When ServerMode=1 (Server), the driver hung when attempting to connect using 
+SQLDriverConnectW. 
+-----------------------------------------------------------------------------------------
+|XDBC-62081 | SparkSQL         | 1520 | B2802 | U2753 |       |         |                         
+When attempting to use custom OpenSSL libraries, which were specified using 
+the SSLLibName and CryptoLibName options, the driver returned the following 
+error: "Unable to determine the OpenSSL version for libssl-3-x64.dll."
+-----------------------------------------------------------------------------------------
+|XDBC-62078 | Redshift         | 2700 | B2824 | U2780 |       |         |                         
+On Windows platforms, the driver failed to connect with the following error
+when attempting to use custom SSL libraries: “Unable to determine the 
+OpenSSL version for libssl-3-x64.dll.”
+-----------------------------------------------------------------------------------------
+|XDBC-61845 | Redshift         | 2700 | B2824 | U2780 |       |         |                         
+When attempting to execute SQLGetInfo(SQL_DBMS_VER), the driver returned 
+an incorrect database version.
+-----------------------------------------------------------------------------------------
+|XDBC-62066 | MySQL         | 0942 | B2754 | U2677 |       |         |                         
+When attempting to use custom OpenSSL libraries, which were specified using the 
+SSLLibName and CryptoLibName options, the driver returned the following error: 
+“Unable to determine the OpenSSL version for libssl-3-x64.dll.”
+-----------------------------------------------------------------------------------------
+|XDBC-63211 | OracleWP   | 3547 | B2722 | U2619 |       |        |
+In certain scenarios, the driver accessed invalid memory when calling 
+SQLSetConnectAttribute, which led to an access violation.
+-----------------------------------------------------------------------------------------
+|XDBC-62075 | OracleWP   | 3547 | B2722 | U2619 |       |        |
+On Windows platforms, the driver failed to connect with the following error
+when attempting to use custom SSL libraries: “Unable to determine the 
+OpenSSL version .dll.”
+-----------------------------------------------------------------------------------------
+|XDBC-62069 | SQLServer | 1933  | B2726 | U2624 |       |        |
+On Windows platforms, the driver failed to connect with the following error 
+when attempting to use custom SSL libraries: “Unable to determine the 
+OpenSSL version .dll.”
+-----------------------------------------------------------------------------------------
+|XDBC-62084| Greenplum    | 0246 | B2757 | U2689 |       |        |
+When attempting to use the custom OpenSSL libraries, specified using the SSLLibName 
+and CryptoLibName connection options, the driver returned the following error: 
+“Unable to determine the OpenSSL version for libssl-3-x64.dll.”
+-----------------------------------------------------------------------------------------
+|XDBC-61988 | OpenSSL       | 1015|       |       |       |                    |
+The default OpenSSL library has been upgraded to version 3.0.15 to fix 
+potential security vulnerabilities
+-----------------------------------------------------------------------------------------
+|XDBC-59693 | Driver Manager | 2488  |  | U2501 |       |        |
+The driver failed to log XA calls when ODBC trace was enabled.
+-----------------------------------------------------------------------------------------
+|XDBC-61247| Driver Manager | 2488  |  | U2501 |       |        |
+When the driver calls SQLGetDiagRecW function, ODBC Trace is incorrectly adding a 
+leading space to certain entries in the log.
+-----------------------------------------------------------------------------------------
+|XDBC-61264 | Snowflake    | 0500 | B2611 | U2489 |       | J001507      |
+The driver has been enhanced to support connecting to Snowflake partner applications.
+Use the new Partner Application Name connection option to specify the name of the 
+partner application to which you want to connect.
+-----------------------------------------------------------------------------------------
+|XDBC-59325 | Hive       | 1295 | B2590 | U2464 |       |        |
+When attempting to run SQLDescribeCol() for a column of String type, the driver
+(version 08.01.1075) returned the following warning in the logs: “Reading the 
+WVARCHAR database column into a VARCHAR column can cause data loss or corruption
+due to character set conversions.”
+-----------------------------------------------------------------------------------------
+|XDBC-59341 | OracleWP   | 3465 | B2552 | U2423 |       |        |
+When attempting to execute SQLBindParameter() with a column size that is greater 
+than the column size of the database, the old driver returned SQL_SUCCESS_WITH_INFO 
+(error message: "String data, right truncated") and the new driver returned SQL_ERROR 
+(error message: "value too large for column").
+-----------------------------------------------------------------------------------------
+|XDBC-59321| OracleWP    | 3465 | B2552 | U2423 |       |        |
+The CLOB data got corrupted when getting inserted into the target table.
+-----------------------------------------------------------------------------------------
+|XDBC-59687 | SharePoint | 0989 | B2533 | U2404 |       |   J001448     |
+The driver failed to connect to SharePoint using OAuth2.0 authentication via 
+Oracle Gateway.
+-----------------------------------------------------------------------------------------
+|XDBC-59907 | SQLServer | 1827 | B2538 | U2409 |       |        |
+The driver (v08.02.1756) failed to connect to Azure Synapse Analytics using 
+OIDC and SAML.
+-----------------------------------------------------------------------------------------
+|XDBC-53750 | Driver Manager | 2309 |  | U2312 |       |        |
+When the TraceOptions keyword is set to 2 or 3, the line headers recorded in the log 
+file have been enhanced to improve readability.
+-----------------------------------------------------------------------------------------
+|XDBC-53832 | GoogleBigQuery| 0624 | B2519 | U2390 |       |        J2108      |
+The driver returned a general, non-informational error message when attempting 
+to authenticate using the Service Account authentication by specifying an empty 
+.json file for the Service Account Private Key connection option.
+-----------------------------------------------------------------------------------------
+|XDBC-58828 | PostgreSQL    | 2802 | B2495 | U2366 |       |            |
+When attempting to run SQLExtendedFetch() to fetch the columns of TIME type that were 
+bound with SQL_C_TYPE_TIME using SQLBindCol(), the driver returned an error.
+-----------------------------------------------------------------------------------------
+|XDBC-59628 | InformixWP    | 0444 | b0282 | U2181 |       |            |
+The driver branded with the latest standalone installer attempted to load the 
+unbranded ICU library file, which caused load failure.
+-----------------------------------------------------------------------------------------|
+|XDBC-59298 | SQLServer       | 1801 | B2474 | U2343 |       |                  |    
+The latest version of the driver failed to connect to the server using Entra ID 
+(Azure Active Directory) authentication using user ID and password (AuthenticationMethod=13). 
+-----------------------------------------------------------------------------------------
+|XDBC-59114 | OracleWP        | 3416 | B2453 | U2322 |       |                  |            
+When attempting to connect using the driver build 3072 or higher, the OS_USER 
+was recorded as an "UNKNOWN_USER" resulting in an application error.
+-----------------------------------------------------------------------------------------
+|XDBC-58417 | OracleWP        | 3416 | B2453 | U2322 |       |                  |            
+When attempting to update more than 4042 characters in a Varchar column with 
+extended MAX_STRING_SIZE, the query generated an "invalid position" error.
+-----------------------------------------------------------------------------------------
+|XDBC-53906 | OracleWP        | 3416 | B2453 | U2322 |       |                  |            
+When attempting to connect to the Oracle 19 database, a cryptographic checksum 
+mismatch error was found in the sqlnet and database server trace logs.
+-----------------------------------------------------------------------------------------
+|XDBC-53794 | OracleWP        | 3416 | B2453 | U2322 |       |                  |            
+When attempting to connect to the Oracle database with an OAS configuration,
+a cryptographic checksum mismatch error occurred on disconnection.
+-----------------------------------------------------------------------------------------
+|XDBC-58443 | PostgreSQL      | 2767 | B2431 | U2300 |       |                  |            
+When attempting to execute SQLGetTypeInfo(), the driver returned a hardcoded value
+as the column size instead of the correct value based on the DSN configuration of
+the MaxLongVarChar and MaxVarchar connection options.
+-----------------------------------------------------------------------------------------
+|XDBC-54397 | OracleWP        | 3371 | B2374 | U2242 |       |                    |            
+Calling SQLDescribeParam() failed when a statement contained a table alias and 
+parameters.
+-----------------------------------------------------------------------------------------
+|XDBC-58362 | OracleWP        | 3371 | B2374 | U2242 |       |                    |            
+If StrLen_or_IndPtr of SQLBindParameter was set to 0, the driver failed to return 
+data in the result for a function/stored procedure call.
+-----------------------------------------------------------------------------------------
+|XDBC-47583 | PostgreSQL     | 2759 | B2422 | U2291 |       |         |              
+The driver failed to call the stored procedure that uses an OUT parameter in its signature.
+-----------------------------------------------------------------------------------------
+|XDBC-53803|  SQLServer      | 1756 | B2368 | U2236 |       |         |              
+The driver failed to connect to the Azure server when attempting to use a 
+redirect policy.
+-----------------------------------------------------------------------------------------
+|XDBC-54431|  SQLServer      | 1756 | B2368 | U2236 |       |         |              
+For certain platforms, the driver returned an incorrect value when calling 
+SQLGetInfo with the SQL_COLLATION_SEQ argument specified. 
+-----------------------------------------------------------------------------------------
+|XDBC-58443 | PostgreSQL      | 2745 | B2394 | U2262 |      |                  |               
+When attempting to execute SQLGetTypeInfo(), the driver returned a hardcoded value as 
+the column size instead of the correct value based on the DSN configuration of the 
+MaxLongVarChar and MaxVarchar connection options.
+-----------------------------------------------------------------------------------------
+|XDBC-53799 | PostgreSQL      | 2745 | B2394 | U2262 |      |                  |              
+On RHEL 7, when attempting to load the new ICU library file, the driver returned 
+the following error: &quot;libFXicu.so: undefined symbol: 
+__cxa_throw_bad_array_new_length&quot;
+-----------------------------------------------------------------------------------------
+|XDBC-53757 | PostgreSQL      | 2745 | B2394 | U2262 |      |                  |               
+The driver attempted to load the default OpenSSL library file despite different 
+SSL library files being specified by the SSLLibName and CryptoLibName options.
+-----------------------------------------------------------------------------------------
+|XDBC-48497 | Salesforce    | 0714 | B2365 | U2233 |       |        J002750     |
+When SQLEngineMode=1 (Server), the driver returned the following error when 
+trying to establish a proxy connection: “service failed to start.”  
+-----------------------------------------------------------------------------------------
+|XDBC-51641 | Salesforce    | 0714 | B2365 | U2233 |       |        J002750     |
+The driver has been enhanced to fix potential security vulnerabilities associated 
+with CVE-2023-5072. 
+-----------------------------------------------------------------------------------------
+|XDBC-53990 | Redshift      | 2550 | B2368 | U2236 |       |                    |
+The UseDeclareFetch and FetchSize connection options have been disabled 
+as they are not supported by the driver.
+-----------------------------------------------------------------------------------------
+|XDBC-53864| Curl          | 1129  |       |       |       |                     |
+On AIX platforms, the driver failed to establish a TLS/SSL connection using 
+libraries specified using the SSLLibName and CryptoLibName options because of 
+an incorrect dependency of the Curl library on the OpenSSL library
+-----------------------------------------------------------------------------------------
+|XDBC-54423 | DB2           | 0813 | B2365 | U2233 |       |         |              
+When running a batch insert operation against a column of DecFloat type in an
+AS400 server, the driver returned the following error when attempting to 
+insert values after inserting a NULL value: "Descriptor received does not 
+match associated data."
+-----------------------------------------------------------------------------------------
+|XDBC-51797 | OracleWP        | 3308 | B2292 | U2130 |       |                    |              
+When the Cached Description Limit connection option was set to a value greater than zero, the 
+08.02.2621 version of the driver crashed when attempting to run the same query multiple times.
+-----------------------------------------------------------------------------------------
+|XDBC-51566 | PostgreSQL      | 2646 | B2273 | U2109 |      |                  |              
+In build 08.02.2505, the driver returned SQL_ERROR when executing a function that 
+contained a RAISE NOTICE clause.
+-----------------------------------------------------------------------------------------
+|XDBC-49436 | winodbctrace    | 0240 |       | U2040|       |                    |   
+When ODBC trace is enabled, the driver crashed when executing SQLGetData. 
+-----------------------------------------------------------------------------------------
+|XDBC-49699 | OracleWP        | 3253 | B2220 | U2049 |       |                    |            
+When AuthenticationMethod=12 (SSL with UID &amp; Password) and ENCRYPTION_SERVER=REQUIRED 
+in the Sqlnet.ora file, the driver failed to connect to an SSL enabled Oracle23c 
+Cloud database.
+-----------------------------------------------------------------------------------------
+|XDBC-49954 | winodbctrace    | 0240 |       | U2040 |       |                    |   
+When enabling ODBC Trace programmatically on Windows, the local ODBC Trace file is not 
+generated in the user-specified location. 
+-----------------------------------------------------------------------------------------
+|XDBC-50437 | OracleWP        | 3253 | B2220 | U2049 |       |                    |               
+In some circumstances, build 08.02.3140 of the driver returned an incorrect number of 
+rows of data when re-executing a parameterized SELECT statement.
+-----------------------------------------------------------------------------------------
+|XDBC-49814 | MySQL         | 0666 | B2132 | U1950 |       |         |                         
+The driver returned an empty result set when calling SQLColumns.
+-----------------------------------------------------------------------------------------
+|XDBC-50210 | PostgreSQL    | 2590| B2197 | U2020 |       |         |              
+When using a function to SELECT data, the driver failed to return a row in the 
+result set after the function discarded a warning message.
+-----------------------------------------------------------------------------------------
+|XDBC-50368 |  SQLServer      | 1617 | B2215 | U2040 |       |         |              
+When the hidden connection option KeepConnectionActive=1, the driver would  
+intermittently hang when trying to execute certain jobs.
+-----------------------------------------------------------------------------------------
+|XDBC-47262 | Driver Manager| 1997 |      | U1987 |       |                    |
+When the TraceOptions keyword is set to 2 and 3, the driver prints incorrect 
+characters in the header and adds unnecessary blank lines after each log entry 
+in the ODBC trace files.
+-----------------------------------------------------------------------------------------
+|XDBC-48824 | Snowflake         | 0433 | B2197 | U2020 |       |     J001446     |     
+A crash occurred when attempting to connect multiple drivers that employ JVMs to a 
+single connection. 
+-----------------------------------------------------------------------------------------
+|XDBC-47585 | PostgreSQL        | 2589| B2197 | U2020 |       |         |              
+When attempting to fetch data from a column of the TIME type, the driver failed to fetch 
+the fractional seconds.
+-----------------------------------------------------------------------------------------
+|XDBC-49503 | PostgreSQL        | 2589| B2197 | U2020 |       |         |           
+When calling SQLFetch() against the result set for SQLStatistics(), the driver returned 
+SQL_SUCCESS_WITH_INFO instead of SQL_SUCCESS/SQL_NO_DATA_FOUND for the FILTER_CONDITION 
+column data.
+-----------------------------------------------------------------------------------------
+|XDBC-49131 | OpenSSL       | 0697|       |       |       |                    |
+The builds of the FIPS and OpenSSL libraries were enhanced to improve security 
+through the use of additional compiler/linker flags.
+-----------------------------------------------------------------------------------------
+|XDBC-40812 | Cassandra     | 0644 | B2103 | U1918|       |     J000531        |
+A crash occurred when attempting to connect multiple drivers that employ JVMs 
+to a single connection
+-----------------------------------------------------------------------------------------
+|XDBC-49446 | PostgreSQL        | 2505| B2078 | U1890 |       |         |           
+When attempting to query an array of time type, the driver returned the following error:
+“Failed to allocate enough space in padZeros”.
+-----------------------------------------------------------------------------------------
+|XDBC-47489 | PostgreSQL        | 2505| B2078 | U1890 |       |         |              
+When attempting to call a stored procedure to run SQLPrepare() and SQLExecute() to
+fetch two result sets, the driver returned the same data for both result sets.
+-----------------------------------------------------------------------------------------
+|XDBC-47523 | OracleWP        | 3140 | B2076 | U1885 |       |         |              
+When attempting to use TLS/SSL encryption with the installed 
+OpenSSL library (libddtls28.so), the driver encountered memory leaks.
+-----------------------------------------------------------------------------------------
+|XDBC-48855 | DB2           | 0627 | B2069 | U1878 |       |         |              
+When binding a Char type column to a Binary type target, the driver converted 
+the data in the source column and returned it in UTF-8 format.
+-----------------------------------------------------------------------------------------
+|XDBC-48436 | DB2           | 0627 | B2069 | U1878 |       |         |              
+When connected to Db2 for z/OS, the driver returned incorrect results
+when executing SQLPrimaryKeys.
+-----------------------------------------------------------------------------------------
+|XDBC-47275 |  Hive     	| 1035 | B2055 | U1864 |       |         |              
+The driver aborted an insert operation for a negative decimal value with the following 
+error: “Error while compiling statement: FAILED: ParseException line  cannot recognize 
+input near .”
+-----------------------------------------------------------------------------------------
+|XDBC-47065 |  SybaseIQ     | 279  | B2038 | U1847 |       |         |              
+The Help buttons on the setup dialog box are not working.
+-----------------------------------------------------------------------------------------
+|XDBC-48562 |  SQLServer    | 1500 | B2058 | U1867 |       |         |              
+The driver returned incorrect datetimeoffset values, with truncated precision.
+-----------------------------------------------------------------------------------------
+|XDBC-47677 |  SQLServer    | 1500 | B2058 | U1867 |       |         |              
+When attempting to run the libddtls64.so file, the driver encountered memory 
+leaks.
+-----------------------------------------------------------------------------------------
+|XDBC-47653 |  SQLServer    | 1500 | B2058 | U1867 |       |         |              
+When a transaction failed, the driver returned SQL_SUCCESS_WITH_INFO instead 
+of SQL_ERROR as the error message.
+-----------------------------------------------------------------------------------------
+|XDBC-47679 | Redshift      | 2330 | B2043 | U1852 |       |                    |
+A memory leak occurred when using the OpenSSL library.
+-----------------------------------------------------------------------------------------
+|XDBC-48825 | SharePoint      | 0920 | B2038  | U1847  |      |    J001344          |
+While running the SQL engine in direct mode, the attempt to establish connections 
+using multiple drivers, which require JVMs to run, from the same application resulted 
+in the following error: "Attempted to read or write protected memory. This is often 
+an indication that other memory is corrupt."
+-----------------------------------------------------------------------------------------
+|XDBC-47372 | DB2           | 0572 | B1936 | U1742 |       |         |              
+When attempting to run SQLDescribeCol() against NVARCHAR and VARGRAPHIC fields 
+of a Db2 for i database, the driver returned an incorrect type code, -10.
+----------------------------------------------------------------------------------------- 
+|XDBC-47678 | DB2           | 0572 | B1936 | U1742 |       |         |              
+When attempting to run the libddtls64.so file, the driver encountered memory leaks.
+-----------------------------------------------------------------------------------------
+
+|XDBC-47523 | OracleWP      | 3072 | B1917 | U1723 |       |                    |
+When attempting to use the libddtls64.so file, the driver encountered memory 
+leaks.
+-----------------------------------------------------------------------------------------
+|XDBC-47273 | OracleWP      | 3072 | B1917 | U1723 |       |                    |
+When the driver attempted to fetch data from tables that have a large number 
+of rows, some of the values set for the ArraySize connection option caused 
+the driver to return incorrect results..
+-----------------------------------------------------------------------------------------
+|XDBC-48148 | OracleWP      | 3072 | B1917 | U1723 |       |                    |
+The latest version of the driver failed to connect successfully. 
+Also, it did not return the appropriate error messages.
+-----------------------------------------------------------------------------------------
+|XDBC-47277 | OracleWP      | 3072 | B1917 | U1723 |       |                    |
+A performance issue occurred when attempting to execute bulk inserts for 
+large data sets containing CLOB data. 
+-----------------------------------------------------------------------------------------
+|XDBC-46556 | GoogleBigQuery | 357 | B1909 | U1715 |       | J001928            |
+The driver returned the following error when executing a parameterized statement:
+ “Query parameter number 1 is not defined (0 provided) at  in statement.”
+-----------------------------------------------------------------------------------------
+|XDBC-47648 | Autorest      | 1412 | B1884 | U1689 |       | J6145              |
+The desktop shortcut for the Autonomous REST Composer failed to launch the tool.
+-----------------------------------------------------------------------------------------
+|XDBC-46499 |  SQLServer    | 1428 | B1884 | U1689 |       |         |              
+The latest version of the driver returned an error when attempting to insert
+a value of the uniqueidentifier data type.
+-----------------------------------------------------------------------------------------
+|XDBC-45328 |  SQLServer    | 1428 | B1884 | U1689 |       |         |              
+When attempting to establish an SSL connection using a truststore file (.crt file), the 
+latest version of the driver returned the following error: 
+“SSL issuer certificate of a locally looked up certificate could not be found.”
+-----------------------------------------------------------------------------------------
+|XDBC-47069 | OpenSSL       | 0595 |       |       |       |                    |
+The driver installed an old version of the OpenSSL library file, 3.0.5, instead 
+of the latest version, 3.0.9.
+-----------------------------------------------------------------------------------------
+|XDBC-37146 | Driver Manager| 1685 |      | U1665 |       |                    |
+The driver manager crashed when encountering an unexpected character before a 
+line feed character in the odbc.ini file.
+-----------------------------------------------------------------------------------------
+|XDBC-47516 | PostgreSQL    | 2397 | B1874 | U1677 |       |                    |
+The driver, after being upgraded from version 7.1.6 to 8.0.2, returned the 
+following error when attempting to fetch data using FetchTSWTZasTimestamp=1: 
+"Invalid character value."
+-----------------------------------------------------------------------------------------
+|XDBC-46915 | PostgreSQL    | 2397 | B1874 | U1677 |       |                    |
+When attempting to run SQLFetchScroll() against a Numeric Column to fetch an 
+NaN value, the driver returned an error.
+-----------------------------------------------------------------------------------------
+|XDBC-47082 | Snowflake     | 0265 | B1823 | U1622 |       |      J001290       |
+The driver SQL engine service did not start on the Windows platform.
+-----------------------------------------------------------------------------------------
+|XDBC-45575 | OracleWP      | 2976 | B1819 | U1618 |       |                    |
+When executing a BEGIN MERGE command with an Oracle HINT in the query, the driver 
+returned the following error: “General error. Procedure name too long.”
+-----------------------------------------------------------------------------------------
+|XDBC-45202 | Redshift      | 2233 | B1819 | U1618 |       |                    |
+When connected to an SSL-enabled Redshift cluster, the driver returned the 
+following error when calling SQLExecute: “This is either an Unknown Type or is 
+not supported currently.”
+-----------------------------------------------------------------------------------------
+|XDBC-45377 | PostgreSQL    | 2357 | B1819 | U1618 |       |                    |
+When attempting to run SQLTables() using % as the schema name, the driver failed to 
+return metadata for some of the tables.
+-----------------------------------------------------------------------------------------
+|XDBC-46025 | Hive           | 0911 | B1771 | U1570 |       |                    |
+When attempting to connect to Apache ZooKeeper, the driver returned the following
+error: “Security Services Error: Consistency checks on input token failed.” 
+-----------------------------------------------------------------------------------------
+|XDBC-44778 |  Redshift     | 2183 | B1733 | U1535 |       |                   |
+The driver returned unexpected results when calling SQLColAttributes(SQL_COLUMN_UPDATABLE).
+-----------------------------------------------------------------------------------------
+|XDBC-40343 | DB2           | 0455 | B1697 | U1497 |       |         |              
+When AuthenticationMethod=1, the driver returned the following error when specifying a 
+password containing a vertical bar/pipe ( | ) character: “User / Password invalid.”
+----------------------------------------------------------------------------------------- 
+|XDBC-45226 | Hive           | 0880 | B1721 | U1523 |       |                    |
+A memory leak occurred when reading data from an ORC file. 
+-----------------------------------------------------------------------------------------
+|XDBC-44268 | OracleWP      | 2888 | B1697 | U1497 |       |         |              
+In certain scenarios, the driver incorrectly truncated XML data inserted into the 
+destination table.
+-----------------------------------------------------------------------------------------
+|XDBC-45095 | Autorest      | 1271 | B1613 | U1405 |       | J5929              |
+During the logon operation, the driver failed to process HTTP response codes as 
+specified in the #http section of the Model file.  
+-----------------------------------------------------------------------------------------
+|XDBC-43810 | InformixWP    | 0124 | b9990 | U1362 |       |            |
+When attempting to insert zero into the column of the DATETIME HOUR TO SECOND 
+type, the driver didn't return a proper error message.
+-----------------------------------------------------------------------------------------
+|XDBC-38743 | InformixWP    | 0124 | b9990 | U1362 |       |            |
+The driver returned an error when attempting to execute a DELETE query with 
+CURRENT OF CURSOR.
+-----------------------------------------------------------------------------------------
+|XDBC-39895 | InformixWP    | 0124 | b9990 | U1362 |       |            |
+Executing SQLExecute returned unexpected results for a CREATE VIEW statement 
+when the view object/table already existed in the database.
+-----------------------------------------------------------------------------------------
+|XDBC-41499 | MySQL         | 0387 | B1529 | U1312 |       |         |              
+The driver failed to return results for databases that contained backticks (`) 
+in the database name.
+-----------------------------------------------------------------------------------------
+|XDBC-40361 | Installer     | 037  |       |       |       |                    |
+After completing a branded installation of ODBC drivers for various UNIX 
+platforms, the unified installer saved the branding password in plain text in the 
+/uninstall/installvariables.properties file.
+-----------------------------------------------------------------------------------------
+|XDBC-43856 |  SQLServer    | 1222 | B1545 | U1334 |       |         |              
+A driver crash occurred due to a null pointer exception during the connection 
+release process.
+-----------------------------------------------------------------------------------------
+|XDBC-43697 |  SQLServer    | 1222 | B1545 | U1334 |       |         |              
+When attempting to execute SQL queries using the Always Encrypted feature, 
+the driver returned the following error: “Reading column crypto metadata failed.”
+-----------------------------------------------------------------------------------------
+|XDBC-44079 |  SQLServer    | 1222 | B1545 | U1334 |       |         |              
+When executing SQLGetDiagRec or SQLGetDiagField, the driver returned SQL_NO_DATA 
+when the previous function returned SQL_ERROR. 
+-----------------------------------------------------------------------------------------
+|XDBC-41589 | GoogleBigQuery| 0273 | B1532 | U1315 |       |        J1694      |
+The driver incorrectly limited DNS-less connection strings to 1024 characters.
+-----------------------------------------------------------------------------------------
+|XDBC-43690 | OracleWP      | 2770 | B1532 | U1315 |       |         |              
+When attempting to run mapping jobs, the driver crashed intermittently. 
+-----------------------------------------------------------------------------------------
+|XDBC-35991 | DB2           | 0394 | B1506 | U1286 |       |         |              
+For UDB DB2 for iSeries and AS/400, the driver inserted incorrect values into a
+Decfloat column.  
+-----------------------------------------------------------------------------------------
+|XDBC-43502 | DB2            | 0394 | B1506 | U1286 |       |         |              
+For a Db2 12 for z/OS connection, the driver failed to return primary key columns 
+for certain tables when calling SQLPrimaryKeys.  
+-----------------------------------------------------------------------------------------
+|XDBC-40306 | DB2            | 0394 | B1506 | U1286 |       |         |              
+The driver failed to execute SELECT and SELECT FOR UPDATE queries for NVARCHAR 
+fields that contained non-ASCII characters.
+-----------------------------------------------------------------------------------------
+|XDBC-41452 | MySQL          | 0381 | B1506 | U1286 |       |         |              
+The driver returned the following error when data of the CHAR data type was padded 
+with NULL characters: “Data too long for column  at row .”
+-----------------------------------------------------------------------------------------
+|XDBC-39193 | MySQL          | 0381 | B1506 | U1286 |       |         |             
+After driver build 257, the driver incorrectly encoded values from databases that 
+used a default encoding other than UTF-8.
+-----------------------------------------------------------------------------------------
+|XDBC-38675 | MySQL          | 0381 | B1506 | U1286 |       |         |              
+The driver failed to return results for metadata functions, such as SQLTables(), 
+when specifying a catalog name using the LIKE operator (%).
+-----------------------------------------------------------------------------------------
+|XDBC-40567 | OracleWP      | 2713  | B1449 | U1212 |       |         |                   
+Build 08.02.2584 of the driver failed to connect when using Kerberos Authentication 
+with an Oracle database server that had the July 2021 (or more recent) Critical 
+Security Patch applied.
+-----------------------------------------------------------------------------------------
+|XDBC-39910 | SQLServer     | 1196 | B1458 | U1222 |       |                    |
+The driver failed to throw an appropriate error when attempting to insert an 
+invalid unique identifier.
+-----------------------------------------------------------------------------------------
+|XDBC-40781 | SQLServer     | 1196 | B1458 | U1222 |       |        		    |
+When executing SQLGetInfo(SQL_COLLATION_SEQ), the driver returned an incorrect 
+collation sequence.
+-----------------------------------------------------------------------------------------
+|XDBC-41578 | SQLServer     | 1196 | B1458 | U1222 |       |        		    |
+When attempting to run mapping jobs, the driver crashed intermittently.
+-----------------------------------------------------------------------------------------
+|XDBC-40700 | AutoRest      | 1152 | B1436 | U1199 |       |        J005751    |
+When issuing a SELECT without a WHERE clause, the driver repeatedly attempted to 
+retrieve copies of the same data until the query was manually terminated.
+-----------------------------------------------------------------------------------------
+|XDBC-36997 | AutoRest	    | 1154 | B1440 | U1203 |       |        J005752    |
+After saving the DSN, the driver truncated the URL value of the REST Sample Path 
+option after the ampersand (&) character.
+-----------------------------------------------------------------------------------------
+|XDBC-38664 | GoogleBigQuery| 0256 | B1436 | U1199 |       |        J001607    |
+The SQL Engine for the driver failed to start after installation.
+-----------------------------------------------------------------------------------------
+|XDBC-40000 | AutoRest	    | 1154 | B1440 | U1203 |       |        J005752    |
+The driver was enhanced to support paging with the OKTA service. 
+-----------------------------------------------------------------------------------------
+|XDBC-35354 | AutoRest	    | 1154 | B1440 | U1203 |       |        J005752    |
+The Azul Zulu JRE installed with the driver has been upgraded to version 11.0.15 
+to resolve potential security vulnerabilities affecting earlier versions. 
+-----------------------------------------------------------------------------------------
+|XDBC-36976 | AutoRest	    | 1154 | B1440 | U1203 |       |        J005752    |
+The installer program crashed when attempting to install on Windows 2019 
+and 2022 machines.
+-----------------------------------------------------------------------------------------
+|XDBC-30514 | Salesforce    | 0295 | B1341 | U1102 |       |        J002260     |
+When installing a Hotfix, the installer program for the Salesforce driver reset 
+SQL Engine connection option settings in the DSN to their default values. 
+-----------------------------------------------------------------------------------------
+|XDBC-40906 | Installer     |      |       |       |       |                    |
+When attempting to install a hotfix, the latest Windows 32-bit installer returned 
+the following error: “Internal Error: Makelic received invalid arguments.“
+-----------------------------------------------------------------------------------------
+|XDBC-40556  | SSL/TLS      | 0570 |       |		  |      			          |         |
+The default version of the OpenSSL library has been upgraded to version 1.1.1t, 
+which fixes the following security vulnerabilities: 
+CVE-2023-0286, CVE-2023-0215, CVE-2022-4450, and CVE-2022-4304.
+-----------------------------------------------------------------------------------------
+|XDBC-40566 | Curl          | 0693  |       |       |       |                     |
+The curl library files that are installed with the product have been
+upgraded to version 7.88.1, which fixes a number of potential security
+vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-40161 | OracleWP      | 2690  | B1376 | U1138 |       |         |                   
+The driver returned an “Unexpected Network” error when attempting to log 
+in using the Impersonate User (ImpersonateUser) option.
+-----------------------------------------------------------------------------------------
+|XDBC-38430 |  Redshift     | 2065 | B1297 | U1055 |       |                   |
+The driver hanged when a negative value is passed into an ln function.
+-----------------------------------------------------------------------------------------
+|XDBC-39907 | Salesforce    | 0295 | B1341 | U1102 |       |        J002260     |
+The driver returned a java.lang.ArrayIndexOutOfBoundsException when 
+updating data using the Bulk API. 
+-----------------------------------------------------------------------------------------
+|XDBC-36390 | Hive           | 0835 | B1327 | U1089 |       |                    |
+The driver failed to return all the columns of a table when UseNativeCatalogFunctions, 
+a deprecated option, was set to 1. 
+-----------------------------------------------------------------------------------------
+| XDBC-38775|  Redshift     | 2065 | B1297 | U1055 |       |                   |
+With SSL enabled, the driver returned an error without an error message when executing  
+SQLExecute for an INSERT statement.
+-----------------------------------------------------------------------------------------
+|XDBC-39802 | AutoREST      | 1084 | B1324 | U1084 |       |    J005668          |    
+The driver was unable to handle a JSON format where the key a value rather than a field.
+-----------------------------------------------------------------------------------------
+|XDBC-39276 | PostgreSQL      | 2122 | B1297 | U1055 |       |         |                  
+The driver intermittently failed to return table metadata.
+-----------------------------------------------------------------------------------------
+|XDBC-39248 | PostgreSQL      | 2122 | B1297 | U1055 |       |         |                   
+When BatchMechanism=2, the driver returned the following error when attempting to 
+load data to a table that has Boolean fields: “column  is of type boolean but expression
+is of type integer.”
+-----------------------------------------------------------------------------------------
+|XDBC-39136 | PostgreSQL      | 2122 | B1297 | U1055 |       |         |                  
+When calling SQLProcedureColumns, the driver returned an extra row with record type in 
+the results for a procedure. The record type row should only be returned in the results 
+for a function.
+-----------------------------------------------------------------------------------------
+|XDBC-38967 | PostgreSQL      | 2122 | B1297 | U1055 |       |         |                   
+The application crashed when calling SQLTables for a PostgresSQL partitioned table using
+the driver.
+-----------------------------------------------------------------------------------------
+|XDBC-40027 | Curl          | 0546  |       |       |       |                    |
+When executing write operations, the driver intermittently failed with the following
+error: “A function was called with a bad parameter.”
+-----------------------------------------------------------------------------------------
+|XDBC-35312 | Sqlserver     | 1120 | B1227 | U0979 |       |                    |
+An error occurred for SQLDescribeParam while attempting to execute a 
+parameterized SELECT query.
+-----------------------------------------------------------------------------------------
+|XDBC-37809 | Sqlserver     | 1120 | B1227 | U0979 |       |                    |
+When calling SQLGetInfo(SQL_KEYSET_CURSOR_ATTRIBUTES1=150), the driver 
+incorrectly returned the following results, despite the driver not supporting 
+bulk operations by bookmark: SQL_CA1_BULK_UPDATE_BY_BOOKMARK, 
+SQL_CA1_BULK_DELETE_BY_BOOKMARK, and SQL_CA1_BULK_FETCH_BY_BOOKMARK.
+-----------------------------------------------------------------------------------------
+|XDBC-39342 | Sqlserver     | 1120 | B1227 | U0979 |       |                    |
+The driver failed to connect to a SQL Server database when 
+HostNameInCertificate=#SERVERNAME# with ValidateServerCertificate=1.
+-----------------------------------------------------------------------------------------
+|XDBC-39837 | Sqlserver     | 1120 | B1227 | U0979 |       |                    |
+The driver failed to connect using Azure AD authentication with the following 
+error: “General error. WSDL security policies invalid or not found.”
+-----------------------------------------------------------------------------------------
+|XDBC-38519 | OracleWP      | 2654  | B1218 | U0970 |       |         |                   
+If the Source and Target DB have a different NLS_CHARACTERSET, the driver 
+incorrectly translated characters when executing a bulk insert.
+-----------------------------------------------------------------------------------------
+|XDBC-38387 | OracleWP      | 2654  | B1218 | U0970 |       |         |                   
+In Oracle ADF, executing copy activity for a table failed with the following 
+error when reading data from the source Oracle database: “Unexpected Network 
+Error.”
+-----------------------------------------------------------------------------------------
+|XDBC-39015 | OracleWP      | 2654  | B1218 | U0970 |       |         |                   
+In certain scenarios, the length of inserted CHAR values is incorrect 
+when EnableBulkLoad=1.
+-----------------------------------------------------------------------------------------
+|XDBC-38563 | Hive            | 0806 | B1187 | U0938 |       |                    |
+The driver returned the following error when attempting to connect using SSL encryption 
+with a PEM certificate file: “SSL Certificate verification failed.”
+-----------------------------------------------------------------------------------------
+|XDBC-37517 | Dynamics365     | 1313 | B1187 | U0938 |       |     J001863       |
+The driver has been enhanced with the new Web Service Timeout (WSTimeout) option, 
+which allow the driver to time out requests that get hung. 
+-----------------------------------------------------------------------------------------
+|XDBC-36933 | Sqlserver     | 1081 | B1180 | U0930 |       |                    |
+The driver failed to execute SELECT or SELECT FOR UPDATE queries against 
+NVARCHAR fields containing non-ASCII characters.
+-----------------------------------------------------------------------------------------
+|XDBC-38403 | Sqlserver     | 1081 | B1180 | U0930 |       |                    |
+The driver returned the following errors when executing a SELECT against a 
+large number of rows and then calling SQLCancel: “Socket closed”, 
+“SSL I/O Error”, or ”01006,”
+-----------------------------------------------------------------------------------------
+|XDBC-38531 | Sqlserver     | 1081 | B1180 | U0930 |       |                    |
+The driver returned the following error when attempting to execute a stored 
+procedure: “Incorrect syntax near OUTPUTOUTPUT.”
+-----------------------------------------------------------------------------------------
+|XDBC-37988 | MySQL         | 0318 | B1163 | U0912 |       |         |          
+When attempting to fetch data of the JSON type, the driver returned the following error:
+ “This is either an Unknown Type or is not supported currently.”
+-----------------------------------------------------------------------------------------
+|XDBC-36014 | MySQL         | 0318 | B1163 | U0912 |       |         |              
+When the driver attempted to connect to an Azure MySQL instance, the connection 
+failed without an error message.
+-----------------------------------------------------------------------------------------
+|XDBC-35537 | MySQL         | 0318 | B1163 | U0912 |       |         |              
+The logon dialog box for the driver allowed only sixteen characters in the 
+User Name field.
+-----------------------------------------------------------------------------------------
+|XDBC-36174 | MySQL         | 0318 | B1163 | U0912 |       |         |              
+When the database character-set was set to utf8mb4, the driver incorrectly 
+converted Chinese characters that were fetched.
+-----------------------------------------------------------------------------------------
+|XDBC-37578 | PostgreSQL      | 2041 | B1138 | U0886 |       |         |                   
+The application hanged when executing SQLPrepare while using the driver.
+-----------------------------------------------------------------------------------------
+|XDBC-36131 | OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+The driver rounded Double values when inserting them into native Number data type.
+-----------------------------------------------------------------------------------------
+|XDBC-36039 | OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+SQLDescribeParam returned the following error: “Invalid hexadecimal character found 
+during conversion.”
+-----------------------------------------------------------------------------------------
+|XDBC-36867 | OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+After upgrading to build 08.02.2552, the driver returned the following error when 
+attempting to call a database function as a parameter: “Invalid character value. 
+Error in parameter 1.”
+-----------------------------------------------------------------------------------------
+|XDBC-36192 | OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+Executing SQLDescribeParm on the parameter marker following the incremented column 
+returned incorrect parameter data.
+-----------------------------------------------------------------------------------------
+|XDBC-36992 | OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+When calling SQLDescribeParam, the driver described the first parameter in a statement as 
+TIMESTAMP, instead of VARCHAR(999).
+-----------------------------------------------------------------------------------------
+|XDBC-37075 | OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+The driver returned an ORA-01830 error when inserting into a timestamp column.
+-----------------------------------------------------------------------------------------
+|XDBC-37395 | OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+The following error was returned at connection after upgrading to version 8.0.2.2584 of 
+the driver: “[Oracle]ORA-12656: Cryptographic checksum mismatch.”
+-----------------------------------------------------------------------------------------
+|XDBC-37372| OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+The driver performed very slow failover recovery. 
+-----------------------------------------------------------------------------------------
+|XDBC-37610| OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+In certain scenarios, the driver failed to connect to an Oracle server after upgrading to 
+the latest build.
+-----------------------------------------------------------------------------------------
+|XDBC-37690| OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+When an Oracle User-Define Function (UDF) is used in a SQL override query, the driver 
+failed to return results when a large date range is defined in the UDF.
+-----------------------------------------------------------------------------------------
+|XDBC-37751| OracleWP      | 2621 | B1145 | U0894 |       |         |                   
+The application intermittently crashed after calling SQLDisconnect. 
+-----------------------------------------------------------------------------------------
+|XDBC-36306 | Curl          | 0435 |       |       |       |                    |
+The zlib library that ships with the product has been upgraded to version 1.2.12 to
+resolve potential security vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-37022 | Sqlserver     | 1062 | B1138 | U0886 |       |                    |
+Build v08.02.1032 of the driver returned different values for Decimal data than earlier 
+builds of the driver.
+-----------------------------------------------------------------------------------------
+|XDBC-34744 | Salesforce      | 0250 | B1016  | U0751  |      |    J002057          |
+Access violation errors intermittently occurred when using the driver in a 
+production environment.
+-----------------------------------------------------------------------------------------
+|XDBC-35270 | Salesforce      | 0250 | B1016  | U0751  |      |    J002057          |
+When the driver was executing a SELECT query, an java.lang.IndexOutOfBoundsException 
+was thrown on on the LongHistory table.
+-----------------------------------------------------------------------------------------
+|XDBC-35909 | Salesforce      | 0250 | B1016  | U0751  |      |    J002057          |
+During a successful connection, the driver returned warnings that .xsd resources 
+could not be found in the classloaders.
+-----------------------------------------------------------------------------------------
+|XDBC-36974 | SharePoint      | 0710 | B0988  | U0721  |      |    J001039          |
+The Configuration Manager failed to fetch OAuth tokens with the following error: 
+"OAuth Flow Failed. Undefined."
+-----------------------------------------------------------------------------------------
+|XDBC-37091 | AutoREST      | 0932 | B1110  | U0849  |      |    J005359          |
+The Configuration Manager opened a blank screen after specifying values for the required
+fields and clicking the Fetch OAuth Token button.
+-----------------------------------------------------------------------------------------
+|XDBC-36861 | AutoREST      | 0932 | B1110  | U0849  |      |    J005359          |
+The Configuration Manager failed to update the Windows registry with the value specified
+in the Extended Options field. In addition, the Configuration Manager failed to populate
+values specified with the ExtendedOptions property in the Connection String pane to
+the Extended Options field.
+-----------------------------------------------------------------------------------------
+|XDBC-34619 | PostgreSQL    | 2033 | B1016 | U0751 |       |                    |
+When the BatchMechanism option on the driver was set to 2 (MultiRowInsert), the application 
+hung when inserting a single row greater than 65535, the primary buffer size.
+-----------------------------------------------------------------------------------------
+|XDBC-36176 | PostgreSQL    | 2033 | B1016 | U0751 |       |                    |
+The driver returned an invalid character value error when attempting to fetch data of the 
+TIMESTAMP WITHOUT TIME ZONE type.
+-----------------------------------------------------------------------------------------
+|XDBC-36497 | OracleWP      | 2592 | B1015 | U0750 |       |         |                   
+When using bulk load, the Oracle database failed to throw an exception when inserting data 
+that exceeded the maximum character length of a column.
+-----------------------------------------------------------------------------------------
+|XDBC-36375 | OracleWP      | 2592 | B1015 | U0750 |       |         |                   
+The driver failed to execute a query with the following error with bulk load enabled 
+(EnableBulkLoad=1): “Function sequence error.”
+-----------------------------------------------------------------------------------------
+|XDBC-36879 | Sqlserver    | 1039 | B1009 | U0743 |       |                    |
+The driver returned the following error when attempting to establish an TLS/SSL connection 
+with certain PEM files specified as the truststore: “SSL passed certificate is self signed 
+and the same certificate cannot be found in the list of trusted certificates.”
+-----------------------------------------------------------------------------------------
+|XDBC-36271 | Sqlserver    | 1035 | B1000 | U0734 |       |                    |
+When running a query against a very large table that required more time than the limit 
+specified by SocketIdleTimeCheckInterval option, the driver created temp files that depleted 
+the available storage, resulting in the application to fail.
+-----------------------------------------------------------------------------------------
+| XDBC-34712|  Redshift     | 0739 | B0997 | U0732 |       |                   |
+When executing SQLNumResultCols against an empty result set, the driver returned SQL_SUCCESS 
+and 0 columns, instead of SQL_SUCCESS and 1 column.
+-----------------------------------------------------------------------------------------
+|XDBC-35831 | Cassandra     | 0311 | B0998 | U0732 |       |     J000457        |
+The Jackson Libraries component of the driver have been replaced by org.json Libraries 
+to resolve the CVE-2020-36518 security vulnerability.
+-----------------------------------------------------------------------------------------
+|XDBC-35558 | OracleWP      | 2584 | B0998 | U0732 |       |         |                   
+An ORA-01841 error occurred when the driver attempted to update a timestamp 
+column.
+-----------------------------------------------------------------------------------------
+|XDBC-35788 | OracleWP      | 2584 | B0998 | U0732 |       |         |                   
+The driver was unable to connect to an Oracle Advanced Security enabled server
+and was not correctly processing an error reply at a certain point in the 
+connection handshake after applying the latest security Hotfix.
+-----------------------------------------------------------------------------------------
+|XDBC-32292 | MySQL         | 0284 | B0997 |  U0732 |       |         |                    
+The driver failed to convert some of the characters correctly.
+-----------------------------------------------------------------------------------------
+|XDBC-33767 | Sqlserver    | 1032 | B0997 | U0732 |       |                    |
+When GET_TDSLENGTH() was set to 0, the driver hanged when executing a commit.
+-----------------------------------------------------------------------------------------
+|XDBC-34162 | Sqlserver    | 1032 | B0997 | U0732 |       |                    |
+When calling SQLDescribeParam, the driver failed to treat question-mark characters in 
+brackets (\[?]) in a query as literals which resulted a crash.
+-----------------------------------------------------------------------------------------
+|XDBC-35930 | Sqlserver    | 1032 | B0997 | U0732 |       |                    |
+When EnableScrollableCursors=4, the driver returned the following error when call 
+SQLBulkOperations: “Optional feature not implemented.”
+-----------------------------------------------------------------------------------------
+|XDBC-34263 | PostgreSQL    | 0829 | B0997 | U0732 |       |                    |
+When the Batch Mechanism option was set to 3, the driver crashed while executing parameter 
+array insert.
+-----------------------------------------------------------------------------------------
+|XDBC-35545 | example       |      |      |        |       |                    |
+An error occurred when specifying a username or password greater than 31 characters using 
+the Example application.
+-----------------------------------------------------------------------------------------
+|XDBC-32068 | Driver Manager| 0786 |      | U0721 |       |                    |
+When a process used two ODBC ENV handles with one handle set for SQL_ATTR_APP_UNICODE_TYPE
+=UTF-8 and the other handle set for SQL_ATTR_APP_UNICODE_TYPE=UTF-16, the strings written 
+to the ODBC trace log for both handles were only in UTF-16 format.
+-----------------------------------------------------------------------------------------
+|XDBC-34221 | Sqlserver     | 1018 | B0983 | U0720 |       |                    |
+When executing a bulk insert from an AIX server to a SQL Server server on Windows, the 
+driver incorrectly converted binary data.
+-----------------------------------------------------------------------------------------
+|XDBC-35480 | Driver Manager | 0780 |      | U0719 |       |                    |
+A crash occurred in the Driver Manager when using the native Teradata driver.
+-----------------------------------------------------------------------------------------
+|XDBC-34746 | OracleWP      | 2564 | B0979 | U0717 |       |         |                   
+Stored procedure with DBMS_SESSION.set_identifier is unable to be executed with 
+SSL enabled Oracle 18c DB while it worked with Oracle 11g.
+-----------------------------------------------------------------------------------------
+|XDBC-34602 | OracleWP      | 2564 | B0979 | U0717 |       |         |                   
+The driver returned garbled results after the initial fetch of SQLTables from an 
+Oracle 19c database with a PDB character set of Shift JIS.
+-----------------------------------------------------------------------------------------
+|XDBC-34862 | OracleWP      | 2564 | B0979 | U0717 |       |         |                   
+Oracle ODBC driver fails to execute a stored procedure and no error message is 
+returned
+-----------------------------------------------------------------------------------------
+|XDBC-33970 | OracleWP      | 2564 | B0979 | U0717 |       |         |                   
+The driver returned the following error when executing a multi-row insert with 
+the hidden connection option IgnoreODBCTimestampLiteral=1: “literal does not match 
+format string.”
+-----------------------------------------------------------------------------------------
+|XDBC-35315 | OracleWP      | 2564 | B0979 | U0717 |       |         |                   
+The driver returned garbled results after the initial fetch of SQLTables from an 
+Oracle 19c database with a PDB character set of Shift JIS.
+-----------------------------------------------------------------------------------------
+|XDBC-33094 | OracleWP      | 2560 | B0973 | U0713 |       |         |                   
+The driver experienced low throughput when executing a Copy activity from an 
+Oracle database to a Microsoft Azure SQL database that contained data of the 
+LONG data type.
+-----------------------------------------------------------------------------------------
+|XDBC-34014 | OracleWP      | 2560 | B0973 | U0713 |       |         |                   
+The driver returned invalid/no results when executing a SQL function containing
+a CLOB and a pair of single quotation marks ('')..
+-----------------------------------------------------------------------------------------
+|XDBC-34610 | OracleWP      | 2560 | B0973 | U0713 |       |         |                   
+The driver truncated data for inserts when the ColumnSize argument of the 
+SQLBindParameter() call was specified as a count of characters.
+-----------------------------------------------------------------------------------------
+|XDBC-34578 | OracleWP      | 2560 | B0973 | U0713 |       |         |                   
+When operating in out-of-band mode, the client was unable to cancel long-running
+queries in certain scenarios, which resulted in the client connection being 
+unavailable for reuse.
+-----------------------------------------------------------------------------------------
+|XDBC-32397 | PostgreSQL    | 0795 | B0968 | U0710 |       |                    |
+When connected to AWS Aurora PostgreSQL, the driver failed to insert the final 
+record when failover occurred during an insert operation.
+-----------------------------------------------------------------------------------------
+|XDBC-33095 | Snowflake     | 0063 | B0967 | U0710 |       |      J000726        |
+The driver incorrectly returned the following error message when setting 
+transaction level other than Read Uncommitted: “Optional feature not 
+implemented.”
+-----------------------------------------------------------------------------------------
+|XDBC-33223 | Snowflake     | 0063 | B0967 | U0710 |       |      J000726        |
+The driver returned the incorrect precision value for the Timestamp column 
+during the SQLColumns() API call.
+-----------------------------------------------------------------------------------------
+|XDBC-33014 | PostgreSQL    | 0795 | B0968 | U0710 |       |                    |
+When connected to CrateDB, the driver failed to insert all the rows of a 
+parameterized array when BatchMechanism=1 (SingleRowInsert).
+-----------------------------------------------------------------------------------------
+|XDBC-33045 | PostgreSQL    | 0795 | B0968 | U0710 |       |         |                    
+When attempting to execute an Insert statement with Auto Commit disabled
+(AutoCommit=false), the driver returned a  Relation Unknown error.
+-----------------------------------------------------------------------------------------
+|XDBC-34037 | PostgreSQL    | 0795 | B0968 | U0710 |       |                    |
+When an SSL library was not included in the installation directory, the driver
+crashed while attempting to connect using a SHA-256 password.
+-----------------------------------------------------------------------------------------
+|XDBC-33228 | OracleWP      | 2552 | B0968 | U0710 |       |         |                   
+SQLDescribeParam returned an incorrect data type in an Insert statement.
+-----------------------------------------------------------------------------------------
+|XDBC-33985 | OracleWP      | 2552 | B0968 | U0710 |       |         |                   
+After the “Oracle Critical Patch Update—July 2021” was applied to the server, 
+the driver failed to connect with a ORA-12269 error.
+-----------------------------------------------------------------------------------------
+|XDBC-32355 | OracleWP      | 2552 | B0968 | U0710 |       |         |                   
+When the driver attempted to insert Unicode data using ODBC parameters, the data got 
+corrupted
+-----------------------------------------------------------------------------------------
+|XDBC-34027 | OracleWP      | 2552 | B0968 | U0710 |       |         |                   
+For driver build 08.02.242, the driver returned the ORA-39776 and ORA-03137 errors when 
+calling SQLExecute for an INSERT with bulk load enabled (EnableBulkLoad=1).
+-----------------------------------------------------------------------------------------
+|XDBC-32076 | OracleWP      | 2552 | B0968 | U0710 |       |         |                   
+The driver returned an “Invalid precision value” when attempting to insert LONG values.
+-----------------------------------------------------------------------------------------
+|XDBC-33710 | OracleWP      | 2552 | B0968 | U0710 |       |         |                   
+The driver returned the following error when attempting to read data from the V$PARAMETER
+ view: “ORA-00942: table or view does not exist.”
+-----------------------------------------------------------------------------------------
+|XDBC-33737 | Ldap     		| 0045 |       |       |       |         |                   
+The OpenLDAP library has been upgraded to version v2.6.0 to address potential security 
+vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-34030 | Cassandra     | 0296 | B0949 | U0695 |       |     J000429        |
+The Jackson Libraries used by the driver (such as, jackson-core, jackson-databind, 
+jackson-annotations) have been upgraded to version 2.13.1 to resolve potential 
+security vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-31721 | Hive    		| 0678 | B0943 | U0691 |       |                      |
+When the driver queried nullable columns, SQLColumns returned incorrect values.
+-----------------------------------------------------------------------------------------
+|XDBC-33185 | InformixWP    | 0020 | b0048 | U0691 |       |            |
+The results of the SQLGetInfo() function were incorrect in the trace file 
+generated using EnablepacketLogging=5. The trace file contained question 
+marks (???) instead of the values for SQL_DBMS_VER and SQL_DRIVER__NAME.
+-----------------------------------------------------------------------------------------
+|XDBC-32976 | Snowflake     | 0055 | B0941 | U0690 |       |      J000659       |
+The Apache Tika library that ships with the driver has been updated to version 1.22 
+to resolve potential security vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-33024 | Snowflake     | 0055 | B0941 | U0690 |       |      J000659       |
+The jsoup library that ships with the driver has been updated to version 1.14.2 to 
+resolve potential security vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-32150 | Sqlserver     | 0502 | B0940 | U0688 |       |                    |
+The driver intermittently hanged in certain scenarios when the Keep Connection Alive 
+option was enabled (KeepConnectionActive=1).
+-----------------------------------------------------------------------------------------
+|XDBC-32602 | Sqlserver     | 0502 | B0940 | U0688 |       |                    |
+When an insert failed while a transaction was still processing, the driver prepended the 
+transaction error to the error from the server, giving the impression that the wrong error 
+message was being returned.
+-----------------------------------------------------------------------------------------
+|XDBC-32647 | Driver Manager | 0748 |      | 0688  |       |                    |
+A multithreaded application crashed while generating the log file for ODBC trace 
+programmatically using SQLSetConnectAttr with the latest Trace library build.
+-----------------------------------------------------------------------------------------
+| XDBC-31072|  Redshift   | 0669 | B0935 | U0686 |       |                   |
+When using an empty value for the LoadBalanceTimeout connection option (LoadBalanceTimeout=), 
+the driver connected to the server successfully with the DSN connection string, but failed to 
+connect with the DSN-less connection string.
+-----------------------------------------------------------------------------------------
+| XDBC-32384|  Redshift   | 0669 | B0935 | U0686 |       |                   |
+When attempting to connect to the database using Azure Active Directory authentication from 
+Windows operating system, the test connection failed and the ODBC Administrator crashed.
+-----------------------------------------------------------------------------------------
+|XDBC-32661 | PostgreSQL    | 0758 | B0937 | U0688 |       |                    |
+When attempting to run batch operations against a Yellowbrick server by setting BatchMechanism (BM)
+to 3 (COPY), the driver failed to copy data from the required table.
+-----------------------------------------------------------------------------------------
+|XDBC-30567 | GBQ           | 0174 | B0932 | U0684 |       |      J1054         |
+The driver removed leading zeros from decimal numbers when returning positive values.
+-----------------------------------------------------------------------------------------
+|XDBC-32517 | Sqlserver     | 0495 | B0934 | U0686 |       |                    |
+When attempting to run SQLGetTypeInfo(varchar), the driver first returned the result for 
+Datetimeoffset data type instead of Varchar.
+-----------------------------------------------------------------------------------------
+|XDBC-32537 | OracleWP      | 2502 | B0920 | U0675 |       |         |                   
+When EnablePackingLogging was set to 1, the driver crashed during a connection for a user 
+that did not have write permissions to the working directory.
+-----------------------------------------------------------------------------------------
+|XDBC-32556 | Schematool   	| 	  |       |       |       |     102             |
+The commons-codec package of the schematool.jar file has been upgraded to version 1.15 to 
+resolve potential security vulnerabilities, including the PRISMA-2021-0055 vulnerability.
+-----------------------------------------------------------------------------------------
+|XDBC-32272 | OracleWP      | 2502 | B0920 | U0675 |       |         |                   
+When attempting to call SQLDescribeParam() for a stored procedure, the driver returned 
+"SQL_VARCHAR,ParameterSizePtr=999" instead of the correct metadata for the field which 
+caused the statement execution to return the error: "String data, right truncated."
+-----------------------------------------------------------------------------------------
+|XDBC-32380 | OracleWP      | 2502 | B0920 | U0675 |       |         |                   
+The driver called a deprecated procedure, dbms_utility.get_parameter_value, to obtain 
+the MAX_STRING_SIZE setting of the server.
+-----------------------------------------------------------------------------------------
+|XDBC-31245 | OracleWP      | 2502 | B0920 | U0675 |       |         |                   
+When attempting to execute SQLDriverConnect(), the driver returned the same value for 
+User and Impersonate User options in the output connection string.
+-----------------------------------------------------------------------------------------
+|XDBC-31464 | SSL/TLS       | 0181 |       |       |       |                    |
+The OpenSSL library that is installed with the drivers has been upgraded to version 1.1.1l 
+to resolve potential security vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-31641 | Sqlserver     | 0480 | B0909 | U0667 |       |                    |
+The driver failed to connect to the server when Encryption Method and Validate Server 
+Certificate connection options were set to 0 and 1 respectively.
+-----------------------------------------------------------------------------------------
+|XDBC-31090 | Sqlserver     | 0480 | B0909 | U0667 |       |                    |
+When Fetch TSWTZ as Timestamp connection option was set to false, the driver returned 
+the values of Datetimeoffset type as those of SQL_WVARCHAR type.
+-----------------------------------------------------------------------------------------
+|XDBC-31361 | GBQ           | 0169 | B0910 | U0667 |       |      J1054         |
+In certain scenarios, the driver returned the following parsing error when attempting to 
+fetch a large number of records: “Unexpected end of stream.”
+-----------------------------------------------------------------------------------------
+|XDBC-32023 | OracleWP      | 2493 | B0908 | U0667 |       |         |                   
+The driver failed to load data from Microsoft Azure Blob Storage into an on-premise 
+Oracle database with an “Invalid position” error.
+-----------------------------------------------------------------------------------------
+|XDBC-29467 | OracleWP      | 2493 | B0908 | U0667 |       |         |                   
+While connected to an Oracle 19c database with SQLNET.ALLOWED_LOGIN_VERSION=8, the 
+driver returned the following error when attempting to insert data into a Varchar2(255) 
+column bound as SQL_WLONGVARCHAR: “String data, right truncated.”
+-----------------------------------------------------------------------------------------
+|XDBC-30950 | MySQL         | 0233 | B0881 | U0650 |       |                    |
+The driver inserted 0 instead of NULL when Batch Mechanism connection option 
+was set to 2.
+-----------------------------------------------------------------------------------------
+|XDBC-30706 | MySQL         | 0233 | B0881 | U0650 |       |                    |
+When attempting to run SQLExecute() for a query that contains a special 
+character (`), the driver returned an error.
+-----------------------------------------------------------------------------------------
+|XDBC-29732 | OracleWP      | 2485 | B0903 | U0664 |       |         |                   
+When attempting to call a stored procedure for the second time, the driver failed to 
+return any result.
+-----------------------------------------------------------------------------------------
+|XDBC-29901 | Sqlserver     | 0468 | B0889 | U0652 |       |                    |
+When attempting to insert 1000 rows in an Azure Synapse database using a parameterized 
+query, the driver returned the following error: "Socket closed".
+-----------------------------------------------------------------------------------------
+|XDBC-30844 | Sqlserver     | 0468 | B0889 | U0652 |       |                    |
+The driver failed to insert data into a table that contains a column of Date type.
+-----------------------------------------------------------------------------------------
+|XDBC-30431 | OracleWP      | 2482 | B0895 | U0657 |       |         |                   
+For certain earlier versions of the Oracle server, SQLCancel failed to interrupt 
+an executing query when connected through a VPN.
+-----------------------------------------------------------------------------------------
+|XDBC-31270 | Trace         |  0712 |  	   | U0656 |       |                    |
+On UNIX/Linux platforms, the ODBC tracing library was enhanced to resolve a number of
+potential security flaws that were identified by Veracode scans.
+-----------------------------------------------------------------------------------------
+|XDBC-30734 | OracleWP      | 2473 | B0887 | U0652 |       |                    |
+The driver has been enhanced with the new BatchFailureReturnsError option, which 
+determines the behavior of the driver when encountering an error in a parameter 
+array insert with bulk load disabled. If set to 1 (enabled), the driver returns 
+SQL_ERROR and rolls back the operation when encountering an error in any of the 
+parameter sets. If set to 0 (Disabled), the driver returns SQL_SUCCESS_WITH_INFO 
+and commits the rows that were successfully inserted prior to encountering the error.
+-----------------------------------------------------------------------------------------
+|XDBC-29811 | Driver Manager | 0703 |      | 0648  |       |                    |
+For dsn-less connections return DriverUnicodeType=1 if used in the connection 
+string returned from SQLDriverConnect
+-----------------------------------------------------------------------------------------
+|XDBC-29871 | Driver Manager | 0703 |      | 0648  |       |                    |
+The driver failed to perform an Insert operation when ODBC trace was enabled 
+using the latest ODBC trace library.
+-----------------------------------------------------------------------------------------
+|XDBC-31114 | Driver Manager | 0703 |      | 0648  |       |                    |
+When attempting to run a SQL statement longer than 1600 characters after enabling 
+ODBC trace, the driver crashed.
+-----------------------------------------------------------------------------------------
+|XDBC-29798 | Sqlserver     | 0458 | B0874 | U0645 |       |                    |
+The driver failed to close the connection handle and returned the error
+"\[DataDirect]\[ODBC lib] Connection in use."
+-----------------------------------------------------------------------------------------
+|XDBC-30430 | Cassandra     | 0268 | B0873 | U0645 |       |     J000420        |
+Following an exception for a timed-out socket operation, due to the specification 
+of NetworkTimeout option, the driver failed to properly clean up the connection.
+-----------------------------------------------------------------------------------------
+|XDBC-25538 | Trace         |  0173 |  	   | U0645 |       |                    |
+On Windows platforms, the ODBC Trace log was overwritten for every new connection.
+-----------------------------------------------------------------------------------------
+|XDBC-24861 | MySQL         | 0228 | B0872 | U0645 |       |                    |
+When fetching parameter values, the driver returned Unicode characters using the 
+wrong character set in certain scenarios. 
+-----------------------------------------------------------------------------------------
+|XDBC-30489 | MySQL         | 0228 | B0872 | U0645 |       |                    |
+The Help button on the General Tab of the driver Setup dialog box opened the 
+incorrect page in the documentation. 
+-----------------------------------------------------------------------------------------
+|XDBC-29593 | Sqlserver     | 0455 | B0872 | U0645 |       |                    |
+The driver was not sending keepalive packets when KeepAlive=1 was set for an SSL connection.
+-----------------------------------------------------------------------------------------
+|XDBC-29663 | Sqlserver     | 0455 | B0872 | U0645 |       |                    |
+The connection failover feature failed to operate when the connections were closed by the 
+Azure SQL Gateway after 30 minutes of idle time.
+-----------------------------------------------------------------------------------------
+|XDBC-29210 | SparkSQL      |0649  | B0830 | U0606 |       |                    |
+ODBC 8.0 installation does not have the updated new single html help file for Spark SQL
+-----------------------------------------------------------------------------------------
+|XDBC-29202 | SparkSQL      |0649  | B0830 | U0606 |       |                    |
+Unable to make HTTP connection to the Azure Databricks datasource
+-----------------------------------------------------------------------------------------
+|XDBC-29571 | Salesforce    | 0195 | B0870 | U0644 |       |      J001533       |
+The driver did not return an error message when a record failed to insert while inserting
+ an array of parameters.
+-----------------------------------------------------------------------------------------
+|XDBC-29601 | OracleWP      | 2456 | B0839 | U0614 |       |                    |
+When attempting to insert parameterized data into a table of NCLOB type with 
+EnableBulkLoad connection option set to 1 (enabled), the driver returned the 
+following error: "No data for the column. NULL inserted instead."
+-----------------------------------------------------------------------------------------
+|XDBC-26904 | Curl          | 0239 |       |       |       |                    |
+The zlib library has been updated to version 1.2.11 to resolve potential security 
+vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-29480 | Sqlserver     | 0447 | B0839 | U0614 |       |                    |
+The driver crashed when attempting to execute an update operation using the 
+Current-Of-Cursor clause against a table, which contains a column of NCHAR type, 
+in SQL Azure Synapse.
+-----------------------------------------------------------------------------------------
+|XDBC-29211 | Hive    		| 0597 | B0836 | U0611 |       |                      |
+The deprecated HTML Help files were not replaced in the installer with the current 
+single HTML file for online help
+-----------------------------------------------------------------------------------------
+|XDBC-28493 | SSL/TLS       | 0162 |       |       |       |                    |
+The OpenSSL library has been updated to version 1.1.1k to resolve the following security 
+vulnerability: CVE-2021-23840.
+-----------------------------------------------------------------------------------------
+|XDBC-29156 | AutoREST      | 0484 | B0835  | U0610  |      |    J4254          |
+The driver has been enhanced to support the following libraries: Jackson-databind 2.12.2 
+and Snakeyaml 1.28.
+-----------------------------------------------------------------------------------------
+|XDBC-29206 | Salesforce    | 0186 | B0830 | U0606 |       |      J001413       |
+When the driver performed frequent delete operations, the deleted data accumulated 
+in the Recycle Bin because the driver did not support a hard delete functionality.
+-----------------------------------------------------------------------------------------
+|XDBC-28320 | Salesforce    | 0186 | B0830 | U0606 |       |      J001413       |
+The driver returned a “communication link failure. rx data invalid mode” error 
+message when a table was queried.
+---------------------------------------------------------------------------------------------
+|XDBC-29435 | GBQ           | 0148 | B0831 | U0607 |       |      J0865         |
+The driver has been enhanced to support the BIGNUMERIC data type.
+-----------------------------------------------------------------------------------------
+|XDBC-29156 | GBQ           | 0148 | B0831 | U0607 |       |      J0865         |
+The driver has been enhanced to support the following libraries: Jackson-databind 2.12.2 
+and Snakeyaml 1.28.
+-----------------------------------------------------------------------------------------
+|XDBC-28629 | Sqlserver    | 0436 | B0822 | U0598 |       |                      |
+A crash occurred in certain scenarios when calling SQLColumnAttribute on Linux platforms.
+-----------------------------------------------------------------------------------------
+|XDBC-28714 | Sqlserver    | 0436 | B0822 | U0598 |       |                      |
+When FetchTSWTZasTimestamp=1, the driver truncated timezone values bound as SQL_C_WCHAR, 
+and octet length was returned as 0.
+-----------------------------------------------------------------------------------------
+|XDBC-28691 | Sqlserver    | 0436 | B0822 | U0598 |       |                      |
+The driver failed to execute bulk insert when attempting to pass a numeric value as a 
+string using SQLWCHAR.
+-----------------------------------------------------------------------------------------
+|XDBC-28789 | Sqlserver    | 0436 | B0822 | U0598 |       |                      |
+When attempting to execute a paremeterized insert query with EnableBulkLoad set to 1, 
+the driver inserted incorrect data into the database.
+-----------------------------------------------------------------------------------------
+|XDBC-28627 | OracleWP      | 2441 | B0814 | U0590 |       |                    |
+When attempting to execute SQLDescribeParam(), the driver returned incorrect results.
+-----------------------------------------------------------------------------------------
+|XDBC-28287 | OracleWP      | 2441 | B0814 | U0590 |       |                    |
+When attempting to insert data into invisible columns of the database, the driver hung.
+-----------------------------------------------------------------------------------------
+|XDBC-28412 | Sqlserver    | 0427 | B0813 | U0589 |       |                      |
+The driver did not return queried rows when the cursor type was static and the 
+connection option EnableServersideCursors was set to values 2 or 4.
+-----------------------------------------------------------------------------------------
+|XDBC-27900 | OracleWP      | 2432 | B0798 | U0577 |       |                    |
+The 7.1.6 version of the driver hung while attempting to execute queries.
+-----------------------------------------------------------------------------------------
+|XDBC-28048 | OracleWP      | 2432 | B0798 | U0577 |       |                    |
+The driver failed to execute parameterized queries against node 14 of the database
+-----------------------------------------------------------------------------------------
+| XDBC-27819|  Redshift   | 0530 | B0777 | U0548 |       |                   |
+When the queried column value was NULL for SQL_C_WCHAR with UTF-16 data, the 
+driver failed to set the character buffer to the accurate number of zero-bytes 
+in the output.
+-----------------------------------------------------------------------------------------
+|XDBC-28004 | Cassandra     | 0235 | B0771 | U0535 |       |     J000336        |
+When a node is unavailable in a DSN configuration with ClusterNodes option, 
+the driver gives a connection error instead of attempting connection to other 
+available nodes. 
+-----------------------------------------------------------------------------------------
+|XDBC-27850 | Cassandra     | 0235 | B0771 | U0535 |       |     J000336        |
+When read or write consistency were set to local quorum, each quorum, 
+local serial, or local one, the driver returned the following error when executing 
+a query: "Cassandra code 10 - Unknown code 65535 for a consistency level."
+-----------------------------------------------------------------------------------------
+|XDBC-27405 | Cassandra     | 0235 | B0771 | U0535 |       |     J000336        |
+The driver mapped the primary key i.e. LIST column to a child table, thereby, 
+removing the primary key from the parent table. 
+-----------------------------------------------------------------------------------------
+|XDBC-27222 | Cassandra     | 0235 | B0771 | U0535 |       |     J000336        |
+The driver behavior did not reflect the setting of the Logon Timeout 
+(LogonTimeout) connection option.
+-----------------------------------------------------------------------------------------
+|XDBC-28030 | MongoDB       | 0331 | B0788 | U0570  |       |     J000544       |
+A third-party application threw an error when multiple parameterized jobs/queries 
+were executed at the same time, while a single query was successfully executed.
+-----------------------------------------------------------------------------------------
+|XDBC-27818 | SSL/TLS       | 0101 |       |       |       |                    |
+The default OpenSSL library has been upgraded to version 1.1.1i to resolve 
+potential security vulnerabilities.
+-----------------------------------------------------------------------------------------
+|XDBC-26451 | Trace         |  0597 |  	   | U0541 |       |                    |
+The following unexpected message was printed to the console by the ODBC trace 
+library: "utf16ToAnsi ucnv_fromUnicode failed!". 
+-----------------------------------------------------------------------------------------
+|XDBC-26798 | Sqlserver    | 0402 | B0766 | U0531 |       |                      |
+When a DATETIME value was specified in a Where clause of an Update statement, 
+the driver failed to find matching records.
+-----------------------------------------------------------------------------------------
+|XDBC-26095 | GitHub       | 0372 | B0772 | U0541  |       |     J000764       |
+The driver has been enhanced to support the Bearer token authentication.
+The default value of the AuthenticationMethod connection property has 
+been changed to BearerToken.
+-----------------------------------------------------------------------------------------
+|XDBC-27448 | OracleWP      | 2417 | B0770 | U0535 |       |                    |
+When attempting to validate the application key, the driver checked the ORG field, but not 
+the CN (Common Name) field.
+-----------------------------------------------------------------------------------------
+|XDBC-27889 | Installer     |      |       |       |       |                    |
+The Unified Installer failed to install the drivers for the following data sources when 
+using the "All ODBC Drivers" license key: Aha!, GitHub, Google Analytics, HubSpot, 
+Microsoft Dynamics 365, Microsoft SharePoint, and TeamCity.
+-----------------------------------------------------------------------------------------
+|XDBC-27918 | Salesforce     | 0162 | B0766 | U0531 |       |     J001251       |
+When attempting to run a query with Left Outer Join against a set of tables where 
+the joining column from the left table has a Null value in it, the driver returned 
+an incorrect result set.
+-----------------------------------------------------------------------------------------
+|XDBC-27931 | Salesforce     | 0162 | B0766 | U0531 |       |     J001251       |
+When attempting to compare a column of Datetime type with a date string, the driver 
+returned an error due to strict type checking.
+-----------------------------------------------------------------------------------------
+|XDBC-26993 | Salesforce     | 0158 | B0746 | U0523 |       |     J001237       |
+A security vulnerability for the SnakeYAML 1.19 component was reported during an SCA scan.
+-----------------------------------------------------------------------------------------
+|XDBC-26497 | Salesforce     | 0158 | B0746 | U0523 |       |     J001237       |
+The driver returned the following error when attempting to authenticate to a proxy
+server: "Unable to tunnel through proxy. Proxy returns 'HTTP/1.1 407 Proxy Authentication 
+Required.'"
+-----------------------------------------------------------------------------------------
+|XDBC-26896 | Sqlserver     | 0397 | B0752 | U0524 |       |                    |
+When calling SQLSetConnectAttr, the driver returned the following error for databases 
+names containing a period: "Database '<truncated_database_name>' does not exist.
+Make sure that the name is entered correctly." 
+-----------------------------------------------------------------------------------------
+|XDBC-26671 | OracleWP      | 2407 | B0747 | U0524 |       |                    |
+For Oracle 11g, the driver returned the following error when attempting to insert 
+string data after a DATE column: “String data, right truncated. Error in parameter x.”
+-----------------------------------------------------------------------------------------
+|XDBC-25765 | OracleWP      | 2407 | B0747 | U0524 |       |                    |
+The driver updated the status array incorrectly after an SQLExecute() call.
+-----------------------------------------------------------------------------------------
+|XDBC-26093 | TeamCity       | 0300 | B0748 | U0524  |       |     J000487       |
+The driver has been enhanced to expose ReadAhead connection option.
+-----------------------------------------------------------------------------------------
+|XDBC-27220 | Sqlserver     | 0393 | B0747 | U0524 |       |                    |
+The latest driver, version 08.02.0390, crashed when executing certain parameterized 
+queries
+-----------------------------------------------------------------------------------------
+|XDBC-27082 | OracleWP      | 2397 | B0734 | U0520 |       |                    |
+The driver returned the following error when attempting to connect while in a container: 
+"Error (6) on input or output to a file. No such device or address."
+-----------------------------------------------------------------------------------------
+|XDBC-26813 | Sqlserver     | 0390 | B0734 | U0520 |       |                    |
+A parameterized query failed with the following error when describing the parameter with 
+the union in the query: “Associated statement is not prepared.”
+-----------------------------------------------------------------------------------------
+|XDBC-25584 | Sqlserver     | 0390 | B0734 | U0520 |       |                    |
+The driver failed to return data when executing a certain parameterized queries against 
+Azure Synapse Analytics (Azure SQL Data Warehouse).
+-----------------------------------------------------------------------------------------
+|XDBC-26293 | Sqlserver     | 0390 | B0734 | U0520 |       |                    |
+The driver returned the following error when attempting to execute SQLDescribeParam: 
+"Error encountered during the SQL Parsing."
+-----------------------------------------------------------------------------------------
+|XDBC-26794 | Sqlserver     | 0390 | B0734 | U0520 |       |                    |
+The driver returned incorrect parameter sizes when executing SQLDescribeParam.
+-----------------------------------------------------------------------------------------
+|XDBC-26899 | Sqlserver     | 0390 | B0734 | U0520 |       |                    |
+When EnableBulkLoad=1 (Enabled), the driver truncated NUMERIC values inserted into a table.
+-----------------------------------------------------------------------------------------
+|XDBC-26697 | Trace         |  0564 |  	   | U0507 |       |                    |
+A crash occurred when a query exceeded 32k while ODBC tracing was enabled. 
+-----------------------------------------------------------------------------------------
+|XDBC-859   | Trace         |  0564 |  	   | U0507 |       |                    |
+The installer program omitted the trace file name when setting the TraceDll path 
+in the odbc.ini file. 
+-----------------------------------------------------------------------------------------
+| XDBC-21311|  Redshift   | 0453 | B0697 | U0498 |       |                   |
+SQLColumnPrivileges and SQLTablePrivileges returned empty result sets instead of 
+the expected metadata.
+-----------------------------------------------------------------------------------------
+|XDBC-26856 | Sqlserver    | 0381 | B0713 | U0507 |       |                      |
+The driver returned SQL_ERROR(-1) as a result for SQLExecute() when auto commit 
+was OFF and records were inserted successfully.
+-----------------------------------------------------------------------------------------
+|XDBC-26664 | Sqlserver    | 0381 | B0713 | U0507 |       |                      |
+When attempting to execute a parameterized query with a column name in brackets, 
+the driver returned the following error for SQLDescribeParam: "Error encountered 
+during the SQL Parsing."
+-----------------------------------------------------------------------------------------
+|XDBC-24928 | Sqlserver    | 0381 | B0713 | U0507 |       |                      |
+When executing SQLGetData, the driver returned the wrong row in certain scenarios.
+-----------------------------------------------------------------------------------------
+|XDBC-26510 | Sqlserver    | 0381 | B0713 | U0507 |       |                      |
+The driver failed failed to update a datetime field containing fractional seconds 
+and returned a warning.  
+-----------------------------------------------------------------------------------------
+|XDBC-26526 | Sqlserver    | 0381 | B0713 | U0507 |       |                      |
+An error was returned for SQLNumREsultCols when preparing a query with greater than 
+2000 characters against an Azure SQL Data Warehouse (Azure Synapse Analytics) database.
+-----------------------------------------------------------------------------------------
+| XDBC-25760|  Redshift   | 0453 | B0697 | U0498 |       |                   |
+When attempting to call SQLColumnsW(), the driver crashed.
+-----------------------------------------------------------------------------------------
+|XDBC-25590 | MongoDB       | 0309 | B0704 | U0503  |       |     J000526       |
+When executing a parameterized query for the second time, the driver failed to 
+return data.
+-----------------------------------------------------------------------------------------
+|XDBC-26557 | AutoREST      | 0388 | B0706  | U0505  |      |    J3591           |
+When certain options were specified in the Extended Options field, the driver failed to 
+connect with a NullPointerException.
+-----------------------------------------------------------------------------------------
+|XDBC-21954 | OracleWP      | 2380 | B0700 | U0501 |       |                    |
+The driver returned the following errors when attempting a bulk insert with 
+EnableBulkLoad=1 (Enabled): "ORA-39776: fatal Direct Path API error loading 
+table" and “ORA-00600: internal error code.”
+-----------------------------------------------------------------------------------------
+|XDBC-26362 | OracleWP      | 2380 | B0700 | U0501 |       |                    |
+Connection failover did not work when the driver used the TNSNAMES.ORA file to 
+store connection information.
+-----------------------------------------------------------------------------------------
+|XDBC-26635 | Snowflake     | 0025 | B0701 | U0501 |       |     J000082        |
+When attempting to read data from a column of Numeric(10,0) type, the driver 
+returned a ClassCastException.
+-----------------------------------------------------------------------------------------
+|XDBC-25517 | Snowflake     | 0025 | B0701 | U0501 |       |     J000082        |
+When querying TIMESTAMP values, the driver incorrectly returned fractional 
+seconds values as all zeros.
+-----------------------------------------------------------------------------------------
+|XDBC-25415 | Snowflake     | 0025 | B0701 | U0501 |       |     J000082        |
+When querying numeric data, the driver returned an incorrect result set in 
+certain scenarios.
+-----------------------------------------------------------------------------------------
+|XDBC-26630 | AutoREST      | 0388 | B0706  | U0505  |      |    J3591           |
+The maximum length for a Security Token value in the setup dialog has increased to 10,240
+characters from 512 characters.
+-----------------------------------------------------------------------------------------
+|XDBC-21728 | SSL/TLS       | 0092 |       |       |       |                    |
+The driver has been enhanced to support OpenSSL 1.1.1g. As a result, the CVE-2019-1551 
+vulnerability is now resolved.
+-----------------------------------------------------------------------------------------
+|XDBC-21728 | SSL/CURL       | 0160 |       |       |       |                    |
+The driver has been enhanced to support OpenSSL 1.1.1g. As a result, the CVE-2019-1551 
+vulnerability is now resolved.
+-----------------------------------------------------------------------------------------
+|XDBC-24689 | SparkSQL      |0520  | B0662 | U0476 |       |                    |
+For SparkSQL v3.0 servers, the driver returned the following error when attempting 
+to execute a insert statement with a partition column value of certain data types: 
+“Error running query: org.apache.spark.sql.AnalysisException: 
+Cannot write incompatible data to table.”
+-----------------------------------------------------------------------------------------
+|XDBC-24797 | Sqlserver    | 0365 | B0691 | U0495 |       |                      |
+The driver truncated the output parameters of SQL Server stored procedure to 50 characters.
+-----------------------------------------------------------------------------------------
+|XDBC-24958 | OracleWP      | 2371 | B0687 | U0491  |      |                    |
+The driver failed to send KeepAlive packets to the database.
+-----------------------------------------------------------------------------------------
+|XDBC-25302 | OracleWP      | 2371 | B0687 | U0491  |      |                    |
+The latest driver hasn't been qualified for IBM Message Queuing support.
+-----------------------------------------------------------------------------------------
+|XDBC-24290 | OracleWP      | 2364 | B0662 | U0476  |      |                    |
+For SELECT statements that include parameter markers in the column list, an 
+"unexpected network error" occurred for prepared statements when 
+column descriptions were requested prior to the initial call to SQLExecute.
+-----------------------------------------------------------------------------------------
+|XDBC-23759 | Sqlserver    | 0345 | B0641 | U0457 |       |                      |
+The 8.0 version of the driver did not return expected results for a stored procedure.
+-----------------------------------------------------------------------------------------
+|XDBC-24515 | Driver Manager | 0515 |      | 0464  |       |                    |
+When SQLSetConnectAttrW(SQL_ATTR_APP_UNICODE_TYPE) was called in an application built 
+with Unicode, the connection failed in the Driver Manager with the following error: 
+“Unicode converter buffer overflow.”
+-----------------------------------------------------------------------------------------
+|XDBC-22862 | Sqlserver    | 0338 | B0627 | U0445 |       |                      |
+When attempting to execute SQLDescribeParam() for a nested parameterized query, 
+the driver returned the following error: "Incorrect syntax near '?'".
+-----------------------------------------------------------------------------------------
+|XDBC-22764 | Sqlserver    | 0338 | B0627 | U0445 |       |                      |
+When attempting to execute a parameterized query that contains a Where clause with 
+brackets in its parameter, the driver returned the following error: “Error encountered 
+during the SQL Parsing“.
+-----------------------------------------------------------------------------------------
+|XDBC-21912 | Sqlserver    | 0338 | B0627 | U0445 |       |                      |
+When attempting to execute SQLDescribeParam() for a nested parameterized query, 
+the driver returned the following error: "Incorrect syntax near the keyword 
+'SET'."
+-----------------------------------------------------------------------------------------
+|XDBC-21890 | Sqlserver    | 0338 | B0627 | U0445 |       |                      |
+When attempting to execute SQLDescribeParam for a parameterized query that contains 
+CASE WHEN conditions and a tempt table, the driver returned the following error: 
+"Error encountered during the SQL Parsing."
+-----------------------------------------------------------------------------------------
+|XDBC-22857 | OracleWP      | 2340 | B0627 | U0445 |       |                    |
+The driver performed slowly when attempting to execute Catalog queries with All_Synonyms
+against Oracle 12g.
+-----------------------------------------------------------------------------------------
+|XDBC-23764 | Driver Manager | 0491 |      | 0441  |       |                    |
+When attempting to connect using the latest version of the driver, 07.16.0425 (B0510, U0363), 
+Kerberos authentication, and null as the value for username, the connection failed.
+-----------------------------------------------------------------------------------------
+|XDBC-22333 | OracleWP      | 2336 | B0622 | U0441 |       |                    |
+Using the .NET framework, when attempting to call SQLGetData() to retrieve the CLOB data, 
+the driver returned SQL_NO_DATA_FOUND.
+-----------------------------------------------------------------------------------------
+|XDBC-21794 | OracleWP      | 2336 | B0622 | U0441 |       |                    |
+The driver failed to connect to Oracle Data Mining Database 11g.
+-----------------------------------------------------------------------------------------
+|XDBC-23169 | Sqlserver    | 0331 | B0615 | U0434 |       |                      |
+The SQLRowCount function returned -1 for MERGE operations, instead of the number of rows 
+updated/added to the target table.
+-----------------------------------------------------------------------------------------
+|XDBC-22758 | Sqlserver    | 0331 | B0615 | U0434 |       |                      |
+While attempting parameterized insert into a table with primary key constraints, when 
+there was a primary key violation, the driver returned "-1" as a result for 
+SQLExecute(). Also, even when the rows were inserted successfully, the driver returned 
+"-1" as a result for SQLRowCount().
+-----------------------------------------------------------------------------------------
+|XDBC-22864 | OracleWP      | 2330 | B0612 | U0433 |       |                    |
+Unable to reconnect after one node is down for ORACLE RAC server during insert operation.
+-----------------------------------------------------------------------------------------
+|XDBC-22011 | OracleWP      | 2330 | B0612 | U0433 |       |                    |
+A file handle leak occurred when connecting using the TNSNamesFile property.
+-----------------------------------------------------------------------------------------
+|XDBC-20385 | OracleWP      | 2330 | B0612 | U0433 |       |                    |
+Stored procedure call crashes the test application when WPM is set to 1.
+-----------------------------------------------------------------------------------------
+|XDBC-21934 | OracleWP      | 2330 | B0612 | U0433 |       |                    |
+When trying to insert BLOB values, the driver returned the following error:
+"Invalid precision value. Error in parameter 12."
+-----------------------------------------------------------------------------------------
+|XDBC-21236 | MongoDB       | 0283 | B0615 | U0434 |       |     J000516        |
+The driver has been updated with enhancements and corrections for handling table-name 
+conflicts. As a result, you may see differences in the schema map exposed by the driver. 
+For example, before the update, the driver would incorrectly modify the name of an 
+existing table to resolve a naming conflict for tables whose name differed only by case, 
+instead of appending a suffix to the name of the newly discovered table. Please contact 
+technical support if this fix results in undesirable changes to your schema map.
+-----------------------------------------------------------------------------------------
+|XDBC-21355 | Snowflake   | 0014  | B0608  | U0430  |       |     J000066       |
+The driver has been upgraded to use the 3.12.3 version of the native Snowflake 
+JDBC driver.
+-----------------------------------------------------------------------------------------
+|XDBC-21924 | Snowflake   | 0014  | B0608  | U0430  |       |     J000066       |
+When attempting to connect to the server using server mode connection, the 
+driver returned NullPointerException.
+-----------------------------------------------------------------------------------------
+|XDBC-21669 | Snowflake   | 0014  | B0608  | U0430  |       |       J000066     |
+The SQLDescribeCol and SQLColumns functions returned differing SQL_NULLABLE 
+I values for the primary key column.
+-----------------------------------------------------------------------------------------
+|XDBC-20487 | Sqlserver    | 0321 | B0603 | U0426 |       |                      |
+For a parameterized Select query that contains a RANK function with an ORDER BY 
+clause, when attempting to execute the SQLDescribeParam method, the driver 
+returned SQL_ERROR.
+-----------------------------------------------------------------------------------------
+|XDBC-21819 | Sqlserver    | 0321 | B0603 | U0426 |       |                      |
+When attempting to update a large number of columns in the database, the driver 
+crashed.
+-----------------------------------------------------------------------------------------
+|XDBC-20582  | All Drivers   |      |       | 0419  |       |         |         
+The code to locate the driver and driver manager message files on Unix based systems has 
+been enhanced to search a path relative to the driver's location. Previously, the driver 
+would search only for message files using a path that was based on the "InstallDir" 
+attribute in the odbc.ini or odbcinst.ini files. Now, if the message files are not 
+located based on this path, the driver searches for message files based on a path that is 
+relative to the driver's location, as specified by the "Driver" attribute in the 
+data source, connection string or odbcinst.ini file.
+-----------------------------------------------------------------------------------------
+|XDBC-19682 | Installer	  	|      |       |       |       |                    |
+When installing the driver with the Unified Installer on a Linux 64-bit machine, 
+an error saying no valid driver modules are present was returned.
+-----------------------------------------------------------------------------------------
+|XDBC-20574 | Salesforce    | 0111 | B0593 | U0419 |       |     715             |
+The ODBC driver created the default value for the SchemaMap connection option 
+with a file name different from that created by the JDBC driver.
+-----------------------------------------------------------------------------------------
+|XDBC-20551 | Salesforce    | 0111 | B0593 | U0419 |       |     715             |
+From the ODBC Data Source Administrator, when attempting to connect with the 
+correct password after a failed attempt with an incorrect password, the driver 
+returned the "socket closed" exception.
+-----------------------------------------------------------------------------------------
+|XDBC-20550 | Salesforce    | 0111 | B0593 | U0419 |       |     715             |
+When attempting to configure a data source by setting the Schema Map connection 
+option to the file prefix of the config file, the driver returned the following 
+error: "SchemaMap must be an absolute path."
+-----------------------------------------------------------------------------------------
+|XDBC-20534 | Salesforce    | 0111 | B0593 | U0419 |       |     715             |
+Certain Salesforce custom field names were incorrectly appended with the string “NULL.”
+-----------------------------------------------------------------------------------------
+|XDBC-20370 | Salesforce    | 0111 | B0593 | U0419 |       |     715             |
+The driver updated only a single record for each bulk API call processed
+-----------------------------------------------------------------------------------------
+|XDBC-19777 | Salesforce    | 0111 | B0593 | U0419 |       |     715             |
+When attempting to connect with the NumberFieldMapping connection option set to 
+AlwaysDecimal, the driver returned the following error: "The value of 
+AlwaysDecimal for connection option NUMBERFIELDMAPPING is invalid."
+-----------------------------------------------------------------------------------------
+|XDBC-19065 | Salesforce    | 0111 | B0593 | U0419 |       |     715             |
+The driver crashed when the HOME environment variable was not set.
+-----------------------------------------------------------------------------------------
+|XDBC-20640 | Driver Manager | 0465 |      | 0417  |       |                    |
+On AIX, the Driver Manager failed to use the odbcinst.ini file when the application 
+was complied with xlc and the Trace keyword is set to 0.
+-----------------------------------------------------------------------------------------
+|XDBC-18307 | MongoDB       | 0264 | B0580 | 0410  |       |                    |
+When attempting to execute a query on a table that contains a special character, 
+the driver returned an error.
+-----------------------------------------------------------------------------------------
+|XDBC-18690 | SSL           | 0244 |       |       |       |                    |
+The OpenSSL 1.0.2u build is to be added for 8.0 drivers.
+-----------------------------------------------------------------------------------------
+|XDBC-17421 | OracleWP    	| 2305 | B0580 | U0410 |       |                    |
+The driver failed to execute xa_recover statement for Oracle Database versions v12 and 
+above.
+-----------------------------------------------------------------------------------------
+|XDBC-19480 | OracleWP    	| 2305 | B0580 | U0410 |       |                    |
+When blob data inserted is 0 or -1 in length, the blob column is updated as NULL. 
+-----------------------------------------------------------------------------------------
+|XDBC-20121 | ddprocinfo  	| 172  |       |       |       |                 	|
+Solaris SPARC 32-bit silent install failing on Solaris SPARC 64-bit machine.
+ddprocinfo is updated to resolve this issue. File version: 8.0.0.172.
+-----------------------------------------------------------------------------------------
+|XDBC-17515 | Cassandra  	| 0153 | B0577 | U0407 |       |    J000304       	|
+For some dates before Jan. 1, 1970, the driver returned incorrect dates.
+-----------------------------------------------------------------------------------------
+|XDBC-17819 | Cassandra  	| 0153 | B0577 | U0407 |       |    J000304       	|
+When creating a table with a column of DURATION type and then executing 
+REFRESH MAP, the driver threw a NullPointerException.
+-----------------------------------------------------------------------------------------
+|XDBC-18080 | Cassandra  	| 0153 | B0577 | U0407 |       |    J000304       	|
+In certain scenarios, the driver inserted a different a fractional seconds 
+value for timestamps than native inserts.
+-----------------------------------------------------------------------------------------
+|XDBC-19212 | OracleWP    	| 2302 | B0576 | U0407 |       |                    |
+In certain scenarios, the driver crashed with the following error when trying to fetch 
+data: “Fatal error has been detected by the Java Runtime Environment.” 
+-----------------------------------------------------------------------------------------
+|XDBC-17507 | OracleWP    	| 2302 | B0576 | U0407 |       |                    |
+When executing a stored procedure, the driver failed to return rows and threw an error 
+after returning SQL_SUCCESS_WITH_INFO. 
+-----------------------------------------------------------------------------------------
+|XDBC-17910 | SQLServer    	| 0303 | B0572 | U0404 |       |                    |
+The application crashed on SQLDescribeParam when a question mark character  was used in 
+comments with a parameterized query. 
+-----------------------------------------------------------------------------------------
+|XDBC-18180 | SQLServer    	| 0303 | B0572 | U0404 |       |                    |
+The SQLRowCount function returned -1 for MERGE operations, instead of the number of rows 
+updated/added to the target table.  
+-----------------------------------------------------------------------------------------
+|XDBC-15804 | MongoDB    	| 253 | B0572 | U0404 |       |     459             |
+The driver failed to execute the CAST_TO_NATIVE function.
+-----------------------------------------------------------------------------------------
+|XDBC-17033 | Schematool   	| 	  |       |       |       |     076             |
+On Linux platforms, the Open Schema Map button on the Open Schema Map window allowed
+users to open multiple instances of the Schema Tool. 
+-----------------------------------------------------------------------------------------
+|XDBC-17326 | Schematool   	| 	  |       |       |       |     076             |
+The Schema Tool hanged when attempting to open it from the driver setup dialog 
+before the default schema had been generated. 
+-----------------------------------------------------------------------------------------
+|XDBC-17942 | Salesforce    | 093 | B0571 | U0403 |       |     428             |
+Request to complete QA for the Salesforce ODBC 8.0 driver for Windows 64-bit
+-----------------------------------------------------------------------------------------
+|XDBC-18079 | Salesforce    | 093 | B0571 | U0403 |       |     428             |
+Bulk fetch from Salesforce intermittently returns 0 records
+-----------------------------------------------------------------------------------------
+|XDBC-16951 | Installer	  	|      |       |       |       |                    |
+When attempting to install the unbranded driver using silent install, the installation 
+failed.
+-----------------------------------------------------------------------------------------
+|XDBC-17685 | Installer	  	|      |       |       |       |                    |
+Installation was failing on multi-core machines, where the number of cores supported by 
+the license key is lesser than the number of cores available on the machine.
+-----------------------------------------------------------------------------------------
+|XDBC-17347 | OracleWP    | 2272 | B0547 | U0390 |       |                    |
+When a long error message was returned from the database, the driver either 
+truncated the message or returned an unexpected network error message.
+-----------------------------------------------------------------------------------------
+|XDBC-17110 | OracleWP    | 2272 | B0547 | U0390 |       |                    |
+An ORA-01008 error was returned when executing a parametrized query with 
+nested SELECT statements.
+-----------------------------------------------------------------------------------------
+|XDBC-16969 | OracleWP    | 2272 | B0547 | U0390 |       |                    |
+Configuring the Logon Timeout connection option failed to change driver 
+behavior.
+-----------------------------------------------------------------------------------------
+|XDBC-16162 | OracleWP    | 2272 | B0547 | U0390 |       |                    |
+A memory fault occurred when attempting to issue as SELECT statement against 
+a column of the XML data type.
+-----------------------------------------------------------------------------------------
+|XDBC-17118 | Hive    			| 0368 | B0547 | U0390 |       |                      |
+When Kerberos authentication was enabled for a proxy connection, the driver returned the 
+kinit user name instead of the proxy user for the SELECT current_user() query.
+-----------------------------------------------------------------------------------------
+|XDBC-16176 | Hive    			| 0368 | B0547 | U0390 |       |                      |
+The ODBC Administrator crashed when attempting to test a connection with TLS/SSL 
+encryption enabled (EncryptionMethod=0).
+-----------------------------------------------------------------------------------------
+|XDBC-16822 | Driver Manager    | 0408 |      | U0365 |       |                      |
+When attempting to call SQLDriverConnect by specifying a value for DSN enclosed in curly 
+brackets, the driver returned the following error: "Data source name not found and 
+no default driver specified."
+-----------------------------------------------------------------------------------------
+|XDBC-15920 | Sqlserver    | 0269 | B0526 | U0369 |       |                      |
+When the driver used SQLDriverConnect to connect, using curly braces to specify connection 
+option values in the connection string, it resulted in buffer ratios that were 3 times 
+larger than without curly braces.
+-----------------------------------------------------------------------------------------
+|XDBC-16038 | Oracle    | 2258 | B0525 | U0368 |       |                      |
+When executing a SELECT statement, the driver incorrectly returned all the values for a 
+column of the UROWID type as NULL.
+-----------------------------------------------------------------------------------------
+|XDBC-17153 | AutoREST    | 0239 | B0532 | U0375 |       | J585               |
+An ArrayIndexOutOfBounds occurred when executing a SELECT using a LIKE predicate that 
+contained constants in both operands.
+-----------------------------------------------------------------------------------------
+|XDBC-17155 | AutoREST    | 0239 | B0532 | U0375 |       | J585               |
+When executing the CHARACTER_LENGTH function, the driver returned a string length that 
+did not account for a trailing space.
+-----------------------------------------------------------------------------------------
+|XDBC-17126 | AutoREST    | 0239 | B0532 | U0375 |       | J585               |
+When executing the CHARACTER_LENGTH function, the driver returned a string length that 
+did not account for a trailing space.
+-----------------------------------------------------------------------------------------
+|XDBC-17149 | AutoREST    | 0239 | B0532 | U0375 |       | J576               |
+COUNT (distinct *) aggregation documented as not supported, but driver does support it.
+-----------------------------------------------------------------------------------------
+|XDBC-17109 | AutoREST    | 0239 | B0532 | U0375 |       | J576               |
+ARC connector DatabaseMetadata.getTypeInfo displays unsupported datatypes.
+-----------------------------------------------------------------------------------------
+|XDBC-17287 | AutoREST    | 0239 | B0532 | U0375 |       | J576               |
+The driver returned a NullPointerException when a field mapped to JSON type 
+contained a null value.
+-----------------------------------------------------------------------------------------
+|XDBC-17154 | AutoREST    | 0239 | B0532 | U0375 |       | J576               |
+An incorrect result set was returned when executing a statement using the UNION 
+ALL operator.
+-----------------------------------------------------------------------------------------
+|XDBC-17150 | AutoREST    | 0239 | B0532 | U0375 |       | J576               |
+A NullPointerException occurred when executing a statement with a WHERE..IN 
+predicate that included null values.
+-----------------------------------------------------------------------------------------
+|XDBC-17112 | AutoREST    | 0239 | B0532 | U0375 |       | J576               |
+When attempting to CAST a data type to the NVARCHAR type, the following error
+was returned: “Unable to determine the type of the specified object.”
+-----------------------------------------------------------------------------------------
+|XDBC-15601 | Sqlserver   | 0269 | B0526 | U0369 |       |                   |
+When attempting to fetch data by setting EnableScrollableCursors to 0, the driver 
+returned an incorrect result.
+-----------------------------------------------------------------------------------------
+|XDBC-15292 |  OracleWP   | 2245 | B0498 |  U0347 |       |                  |
+An “Unexpected Network Error” occurred when processing a high volume of 
+requests in a multi-threaded environment.
+-----------------------------------------------------------------------------------------
+|XDBC-15308 |  OracleWP   | 2244 | B0498 |  U0347 |       |                  |
+When attempting to call SQLExtendedFetch after setting a value of 1016 for 
+SQLSetStmtAttr(SQL_ROWSET_SIZE), the driver crashed.
+-----------------------------------------------------------------------------------------
+|XDBC-15741|  MongoDB     | 0224 | B0486 |  U0336 |       | J000430           |
+The Schema Tool failed to update the maximum size of the VARBINARY type when specifying a 
+value larger than the default (8000).
+-----------------------------------------------------------------------------------------
+|XDBC-15182|  MongoDB     | 0224 | B0486 |  U0336 |       | J000430           |
+When executing a LEFT JOIN for two collections, the driver incorrectly returned NULL values 
+for the columns of one of the collections, with the exception of the first row of the 
+result set.
+-----------------------------------------------------------------------------------------
+|XDBC-15762|  MongoDB     | 0222 | B0481 |  U0331 |       | J000420           |
+When attempting to fetch an emoji, the driver returned “??”.
+-----------------------------------------------------------------------------------------
+|XDBC-15130|  MongoDB     | 0222 | B0481 |  U0331 |       | J000420           |
+When attempting to run a SELECT statement on tables that contain nested array elements, 
+the driver returned the NullPointerException.
+-----------------------------------------------------------------------------------------
+|XDBC-14050|  SQLServer   | 0235 | B0472 |  U03122|       |                    |
+When attempting to execute the SQLNumResultCols function to fetch results from Azure SQL 
+Data Warehouse, the driver returned an incorrect number of rows.
+-----------------------------------------------------------------------------------------
+|XDBC-15155|  SQLServer   | 0235 | B0472 |  U03122|       |                    |
+When attempting to use a Select statement with For XML clause, the driver returned 
+incorrect results.
+-----------------------------------------------------------------------------------------
+|XDBC-14243|  Oracle   | 2218 | B0456 |  U0311 |       |                    |
+The driver failed to connect with an “Unexpected Network Error” when using a SCAN address 
+on Oracle 12c.
+-----------------------------------------------------------------------------------------
+|XDBC-15001|  SQLServer   | 0228 | B0454 |  U0310 |       |                    |
+The driver returned an error when attempting to update a Select statement using SQLSetPos.
+-----------------------------------------------------------------------------------------
+|XDBC-12703|  SQLServer   | 0228 | B0454 |  U0310 |       |                    |
+The driver failed to connect to SQL Server Azure database that was using redirect 
+configuration policy and Active Directory authentication. 
+-----------------------------------------------------------------------------------------
+|XDBC-14053|  SQLServer   | 0228 | B0454 |  U0310 |       |                    |
+The driver failed to automatically enable data encryption (EncryptionMethod=1) when 
+connecting to an Azure SQL Data Warehouse server, causing the connection to fail.
+-----------------------------------------------------------------------------------------
+|XDBC-14052|  OracleWP   | 2214 | B0451 |  U0310 |       |                    |
+AccessViolation exception is encountered when the target table has a bad state, and then
+ tried to insert into table again with same data and same way.
+-----------------------------------------------------------------------------------------
+|XDBC-13969|  OracleWP   | 2214 | B0451 |  U0310 |       |                    |
+When attempting parameterized insert for Blob data type, the driver returned the following 
+error: "ODBC Oracle Wire Protocol driver][Oracle]ORA-01461: can bind a LONG value only for 
+insert into a LONG column (1461)."
+-----------------------------------------------------------------------------------------
+|XDBC-14006|  OracleWP   | 2210 | B0448 |  U0308 |       |                    |
+When the driver attempted to connect to an SSL enabled database, a memory leak occurred 
+that caused the connection to fail.
+-----------------------------------------------------------------------------------------
+|XDBC-14164|  OracleWP   | 2210 | B0448 |  U0308 |       |                    |
+When SSL was enabled, jobs would intermittently crash in the SSL library in certain scenarios.
+-----------------------------------------------------------------------------------------
+|XDBC-14129|  OracleWP   | 2210 | B0448 |  U0308 |       |                    |
+Unexpected Network Error” connecting to Oracle DBCS with SSL
+-----------------------------------------------------------------------------------------
+|XDBC-10123|  Sqlserver   | 222 | B0443 |  U0304 |       |         |                    
+The driver provided extraneous rpaths.
+-----------------------------------------------------------------------------------------
+|XDBC-12890|  Sqlserver   | 222 | B0443 |  U0304 |       |         |                    
+The driver returned the following error when attempting to update data of the datetime/datetime2
+type using a cursor: “No rows were affected by UPDATE/DELETE WHERE CURRENT OF cursor emulation (0)".
+-----------------------------------------------------------------------------------------
+| XDBC-12090 | SSL         | 0194 |       |       |       |                    |
+The OpenSSL library that ships with the driver has been upgraded to version
+1.0.2r, which resolves several security vulnerabilities.
+
+See the ODBC(64)README.TXT file for more information on the OpenSSL library 
+upgrade.
+
+Version strings of the SSL libraries installed:
+1.0.2r - 08.02.0194
+-----------------------------------------------------------------------------------------
+|XDBC-13608 | AutoREST    | 0157 | B0441 | U0302 |       | J336               |
+Loading a REST configuration does not generate the expected metadata, for certain data
+structures that contain arrays.
+-----------------------------------------------------------------------------------------
+|XDBC-13590 | AutoREST    | 0144 | B0437 | U0299 |       | J303               |
+When connecting to Jira, the driver generated incorrect metadata for a custom 
+fields table that resulted in missing columns. 
+-----------------------------------------------------------------------------------------
+|XDBC-12196|  OracleWP   | 2204 | B0425 |  U0287 |       |                    |
+When attempting to execute a Select that included a column name greater than 255 characters,
+ the driver was returned an "ORA-01426: numeric overflow" error.
+-----------------------------------------------------------------------------------------
+|XDBC-12283|  OracleWP   | 2204 | B0425 |  U0287 |       |                    |
+The driver returned the following error when attempting to execute a stored procedure that 
+returns a NULL REF CURSOR parameter: "ORA-00900: invalid SQL statement."
+-----------------------------------------------------------------------------------------
+|XDBC-12258|  OracleWP   | 2200 | B0413 |  U0280 |       |                    |
+When attempting to perform Bulk Load INSERT into a partitioned table, the driver 
+returned an “Access Violation” error.
+-----------------------------------------------------------------------------------------
+|XDBC-10505|  Sqlserver   | 211 | B0410 |  U0280 |       |         |                    
+When executing SQLRowCount, the driver incorrectly returned the size of the result set, 
+instead of the number of rows affected by a delete.
+-----------------------------------------------------------------------------------------
+| XDBC-11239|  OracleWP   | 2199 | B0400 | U0272 |       |                    |
+When attempting to execute a SELECT query with non-numeric parameters on NUMBER 
+columns, the driver returned SQL_SUCCESS_WITH_INFO instead of SQL_ERROR.
+-----------------------------------------------------------------------------------------
+| XDBC-11145|  OracleWP   | 2191 | B0397 | U0270 |       |                    |
+When Enable Bulk Load was enabled (EnableBulkLoad =1), the driver threw an 
+access violation when attempting to execute a direct path load using 
+parameter arrays.
+-----------------------------------------------------------------------------------------
+| XDBC-10496|  OracleWP   | 2191 | B0397 | U0270 |       |                    |
+After calling SQLBindParameter with a SQL type of SQL_LONGVARCHAR for a 
+column that is not a long/LOB column and issuing a SQLExecute, the driver 
+returned the following error on a subsequent SQLExecute call: "Data type for 
+parameter 2 has changed since first SQLExecute call."
+-----------------------------------------------------------------------------------------
+| XDBC-10197|  OracleWP   | 2191 | B0397 | U0270 |       |                    |
+When Support Binary XML was enabled (SupportBinaryXML=1), the driver 
+incorrectly truncated large XML values when fetching data.
+-----------------------------------------------------------------------------------------
+| XDBC-10564|  Redshift   | 0164 | B0392 | U0268 |       |                   |
+When attempting to execute a parameter row insert with a large batch size, the driver 
+failed to insert a few rows.
+-----------------------------------------------------------------------------------------
+| XDBC-10936|  OracleWP   | 2183 | B0391 | U0268 |       |                    |
+The driver returned an “Unexpected Network Error” when the connection was 
+idle for a long time.
+-----------------------------------------------------------------------------------------
+| XDBC-9211|  OracleWP    | 2183 | B0391 | U0268 |       |                    |
+When using row-wise parameter binding, the driver failed to add the 
+SQL_ATT_ ATTR_PARAM_BIND_OFFSET value to bound data addresses when executing
+a parameterized array insert.
+-----------------------------------------------------------------------------------------
+| XDBC-10064| Driver Manager    | 0305 |        | U0268 |       |                    |
+When the ROWSET size was set to a value greater than 1 and the SQLExtendedFetch 
+function was called to retrieve the unicode column values, the Driver Manager crashed.
+-----------------------------------------------------------------------------------------
+| XDBC-10282| OracleWP    | 2178 | B0386 | U0258 |       |                    |
+The driver returned the following error when attempting to connect to a 
+server on which SEC_CASE_SENSITIVE_LOGON was set to FALSE: 
+ORA-01017: invalid username/password; logon denied.
+-----------------------------------------------------------------------------------------
+| XDBC-9964 | OracleWP    | 2178 | B0386 | U0258 |       |                    |
+When EnableBulkLoad=1, the driver hanged with the following server error when 
+attempting to insert records into a table containing more than 255 
+columns: “ORA-00600.”
+-----------------------------------------------------------------------------------------
+| XDBC-10224| OracleWP    | 2178 | B0386 | U0258 |       |                    |
+When specifying SQL_ATTR_PARAM_STATUS_PTR for a status array, the driver 
+returned an incorrect error status for rows.
+-----------------------------------------------------------------------------------------
+| XDBC-10284 | SQLServer WP | 202 | B0386 | U0258 |       |                    |
+When the SQLColumns function was called, the driver returned an incorrect buffer length 
+for a datetimeoffset column
+-----------------------------------------------------------------------------------------
+| XDBC-9197 | OracleWP    | 2168 | B0380 | U0258 |       |                    |
+When calling SQLDriverConnect, the driver failed to connect when the connection string 
+did not specify a value for the PortNumber connection option.
+-----------------------------------------------------------------------------------------
+| XDBC-9398 | Hive        | 0221 | B0380 | U0258 |       |                    |
+Contains a libcurl library that will show the version number of the odbc pack 
+and contain the progress copyright.  
+-----------------------------------------------------------------------------------------
+| XDBC-9856 | OracleWP    | 2158  | B0380   U0258 |       |                  |         |
+When auto commit was turned off, the server returned the following error after a driver conversion error:
+"ORA-24795: Illegal ROLLBACK/COMMIT attempt made."  
+-----------------------------------------------------------------------------------------
+| XDBC-9238 | MongoDB             |       |       |       |                  |         |
+The Progress DataDirect MongoDB SQL Engine service was installed without double quotes 
+in the \&quot;path to executable\&quot; section of the services.msc.   
+-----------------------------------------------------------------------------------------
+| XDBC-8105 | Cassandra    |      |       |       |       |                  |
+The Progress DataDirect Cassandra SQL Engine service was installed without double quotes 
+in the \"path to executable\" section of the services.msc. 
+-----------------------------------------------------------------------------------------
+| XDBC-1670 | Cassandra    | 0101 | B0377 | U0256 |       |    J000251       |
+A java.lang.ArrayIndexOutOfBoundsException was returned when fetching data that 
+included a large text field.   
+-----------------------------------------------------------------------------------------
+| XDBC-9290 | Cassandra    | 0101 | B0377 | U0256 |       |    J000251       |
+The driver failed to connect to a database when the word “frozen” was present 
+in the database metadata.   
+-----------------------------------------------------------------------------------------
+| XDBC-8017 | Cassandra    | 0101 | B0377 | U0256 |       |        J000251   |
+In certain scenarios, the driver returned a “General Error” when attempting 
+to test connect.   
+-----------------------------------------------------------------------------------------
+| XDBC-9218 | OracleWP    | 2148 | B0378 | U0256 |       |                   |
+The driver returned a “Connection Dead” error when using SQLExtendedFetch 
+and the connection to the primary server was lost. 
+-----------------------------------------------------------------------------------------
+| XDBC-9077 | OracleWP    | 2148 | B0378 | U0256 |       |                    |
+A "Parse token 2" error occurs when connecting with AuthenticationMethod = 6 (NTLM) 
+in some environments.
+-----------------------------------------------------------------------------------------
+| XDBC-8983 | OracleWP    | 2148 | B0378 | U0256 |       |                    |
+Connect for ODBC Oracle Driver parameterized array insert limited in size 
+to 64k
+-----------------------------------------------------------------------------------------
+| XDBC-8715 | OracleWP    | 2148 | B0378 | U0256 |       |                    |
+A "Parse Token 2" error was returned when attempting to connect using NTLM 
+as a domain user from a Windows client that is not in a domain.
+-----------------------------------------------------------------------------------------
+| XDBC-8264 | OracleWP    | 2148 | B0378 | U0256 |       |                    |
+The driver failed to connect to an Oracle 12c (12.2) server when 
+ALLOWED_LOGON_VERSION_SERVER=12a is specified in the sqlnet.ora file. 
+-----------------------------------------------------------------------------------------
+| XDBC-1447 | MongoDB     | 0194 | B0366 | U0249 |       | J000381            |
+When mapping to a normalized view, the driver incorrectly mapped multi-level 
+arrays to a flattened view at the certain levels. 
+-----------------------------------------------------------------------------------------
+| XDBC-8035 | MongoDB     | 0194 | B0366 | U0249 |       | J000381            |
+Progress DataDirect services were installed without double quotes in the 
+\"path to executable\" associated with the service.
+-----------------------------------------------------------------------------------------
+| XDBC-8526 | MongoDB     | 0194 | B0366 | U0249 |       | J000381            |
+The drive failed to connect when the value specified for the User Name option 
+contained an equals sign (=) character.
+-----------------------------------------------------------------------------------------
+| XDBC-8007 | MongoDB     | 0194 | B0366 | U0249 |       | J000381            |
+When normalizing nested arrays, the driver created extra levels of tables with 
+empty columns.
+-----------------------------------------------------------------------------------------
+| XDBC-1614 | MongoDB     | 0194 | B0366 | U0249 |       | J000381            |
+The following error was returned when attempting to specify date/datetime data 
+in a WHERE clause: “syntax error or access rule violation: incompatible 
+data types in combination.”
+-----------------------------------------------------------------------------------------
+| XDBC-8916 | MongoDB     | 0194 | B0366 | U0249 |       | J000381            |
+When the driver directory was the same as the installation root directory, 
+the Schema Tool failed to launch from the setup dialog with the following 
+error: "Cannot find the Schema Tool."	
+-----------------------------------------------------------------------------------------
+| XDBC-8842 | Driver Manager | 0292 |    | U0256 |       |                    |
+The Driver Manager returned the following error when the native Teradata 
+driver retrieved null values from CLOB columns using SQLGetData: ''Unicode 
+converter truncated character.''
+-----------------------------------------------------------------------------------------
+| XDBC-9174 | SQLServer WP| 0187 | B0343 | U0229 |       |                    |
+When installed SQLServer 8.0 driver for ODBC, the ddsqls28r.so file, which was 
+not required, also got installed.
+-----------------------------------------------------------------------------------------
+| XDBC-8137 | OracleWP    | 2131 | B0361 | U0247 |       |                    |
+The driver returned Timestamp With Time Zone data using the incorrect format.
+-----------------------------------------------------------------------------------------
+| XDBC-8641 | OracleWP    | 2131 | B0361 | U0247 |       |                    |
+The following error was returned when attempting to transfer data between tables with 
+EnableBulkLoad=1 (enabled): "ORA-39826: Direct path load of view or synonym." 
+-----------------------------------------------------------------------------------------
+| XDBC-8703 | OracleWP    | 2131 | B0361 | U0247 |       |                    |
+When calling SQLColumns, the driver incorrectly returned the TIMESTAMP WITH 
+LOCAL TIME ZONE data type as "TIMESTAMP WITH LOCAL TIMEZONE" in result sets.
+-----------------------------------------------------------------------------------------
+| XDBC-8892 | OracleWP    | 2131 | B0361 | U0247 |       |                    |
+The following error occurred when attempting to insert values into an XMLType column in 
+a Oracle 12 database: "two-task conversion routine: integer overflow on Oracle12 
+with the V8 ODBC driver." 
+-----------------------------------------------------------------------------------------
+| XDBC-8714 | Driver Manager     | 0279 |        | U0247 |      |             |
+Null values were returned in place of Char and Varchar values when executing a fetch with
+ the native Teradata driver.
+-----------------------------------------------------------------------------------------
+| XDBC-8713 | Driver Manager     | 0279 |        | U0247 |      |             |
+The native Teradata driver returned the following error when attempting the fetch data 
+containing the Timestamp, Integer, Char, and Varchar data types: &quot;SQL C type not 
+supported.&quot;
+-----------------------------------------------------------------------------------------
+| XDBC-1771 | OracleWP    | 2114 | B0330 | U0219 |       |                    |
+The driver incorrectly returned Null values for the INDEX_QUALIFIER column 
+when executing SQLStatistics.
+-----------------------------------------------------------------------------------------
+| XDBC-1781 | OracleWP    | 2114 | B0330 | U0219 |       |                    |
+The driver returned a truncated error message from the server.
+-----------------------------------------------------------------------------------------
+| XDBC-3565 | OracleWP    | 2114 | B0330 | U0219 |       |                    |
+varchar2 max size for Oracle12cR2 is showing the MAX_ALLOWED_SIZE and not as 
+the defined size
+-----------------------------------------------------------------------------------------
+| XDBC-1672 | OracleWP    | 2114 | B0330 | U0219 |       |                    |
+An ORA-00600 error was returned when attempting to execute a stored procedure 
+using the InitializationString option.
+-----------------------------------------------------------------------------------------
+| XDBC-1779     | Driver Manager     | 0253 |        | U0221 |      |             |
+After the application turned off tracing using SQL_OPT_TRACE_OFF, SQL_ATTR_TRACE returned
+ a value of 1, instead of 0.
+-----------------------------------------------------------------------------------------
+| 87372     | OracleWP   | 2106  | B0304 | U0202 |       |                    |
+An unexpected network error occurred when the SEC_USER_UNAUTHORIZED_ACCESS_BANNER
+parameter was enabled in the sqlnet.ora file. 
+-----------------------------------------------------------------------------------------
+| 87311     | Cassandra   | 0083  | B0302 | U0202 |       |  J000216           |
+The driver has been enhanced to support all Cassandra consistency levels.
+-----------------------------------------------------------------------------------------
+| 85482     | OracleWP    | 2099 | B0294 | U0194 |       |                    |
+When inserting multiple rows of string data using parameter arrays, the driver inserted 
+incorrect values. 
+-----------------------------------------------------------------------------------------
+| 87478     | Driver Manager     | 0223 |        | U0195 |      |             |
+On calling SQLFetchScroll, the Driver Manager stopped working as expected
+-----------------------------------------------------------------------------------------
+| 87472     | Driver Manager     | 0223 |        | U0195 |      |             |
+The Driver Manager truncated the user id to limit it to 107 characters, while attempting
+to call SQLConnect, which resulted in the database connection failure
+-----------------------------------------------------------------------------------------
+| 87297     | Driver Manager     | 0223 |        | U0195 |      |             |
+Intermittent crashes occur when setting SQL_OPT_TRACE_ON with driver manager 08.01.0209 
+and the Teradata native driver. This issue has now been resolved.
+-----------------------------------------------------------------------------------------
+| 87458     | Driver Manager     | 0223 |        | U0195 |      |             |
+Previously, driver manager 08.01.0202 could not load Native Teradata driver on HPUX IA.
+This issue has now been resolved.
+-----------------------------------------------------------------------------------------
+| 85600     | Driver Manager     | 0217 |        | U0192 |      |             |
+When using the native Teradata driver, a crash occurred when setting the SQL_ATTR_TRACE
+attribute to SQL_OPT_TRACE_ON with the the SQLSetConnectAttr API.
+-----------------------------------------------------------------------------------------
+| 86431     | Driver Manager     | 0217 |        | U0192 |      |             |
+When using a UTF-8 driver with a UTF-16 application, fetching truncated String data 
+using SQLGetData returned a length indicator of 0 instead of SQL_NO_TOTAL. 
+-----------------------------------------------------------------------------------------
+| 84458     | Driver Manager     | 0213 |        | U0192 |      |             |
+Driver Manager checked the type for bound parameters and returned an error instead of the 
+third-party driver.
+-----------------------------------------------------------------------------------------
+| 84157     | OracleWP    | 2083  | B0277 | U0186 |       |                   |
+The driver intermittently hanged when attempting to connect. 
+-----------------------------------------------------------------------------------------
+| 83647     | OracleWP    | 2083  | B0277 | U0186 |       |                   |
+Driver incorrectly inserted a NULL value to a BLOB column with bulk load enabled when the 
+column was bound as type SQL_BINARY. 
+-----------------------------------------------------------------------------------------
+| 83088     | OracleWP    | 2083  | B0277 | U0186 |       |                   |
+The driver aborted an attempt to re-execute a valid stored procedure.  
+-----------------------------------------------------------------------------------------
+| 83353     | SSL         | 0147 |       |       |       |                    |
+The OpenSSL library has been updated to version 1.0.2n. 
+
+See the ODBC(64)README.TXT file for more information on the OpenSSL library upgrade.
+
+Version strings of the SSL libraries installed:
+1.0.2n - 08.01.0147
+-----------------------------------------------------------------------------------------
+| 86050     | Installer   |      |       |       |       |                    |
+After branding, the installer program specified the file name of the unbranded 
+trace library in the installed odbc.ini file. 
+-----------------------------------------------------------------------------------------
+| 85553     | Driver Manager     | 0209 |        | U0188 |      |             |
+When running ODBC tracing with multiple processes, the driver wrote over trace 
+files of previous processes with every new connection. 
+-----------------------------------------------------------------------------------------
+| 85352     | SparkSQL     | 0188 | B0277 | U0186 |       |                   |
+The driver failed to return all the tables when SQLTables was called.   
+-----------------------------------------------------------------------------------------
+| 83800     | MongoDB     | 0162 | B0277 | U0186 |        |     J0287         |
+The driver failed to convert binary data to a string in the generated ID.  
+-----------------------------------------------------------------------------------------
+| 80735     | MongoDB     | 0162 | B0277 | U0186 |        |     J0287         |
+The driver returned the following error when attempting to establish a connection: 
+“JVM options do not match previous options.” 
+-----------------------------------------------------------------------------------------
+| 84422     | MongoDB     | 0162 | B0277 | U0186 |        |      J0287        |
+The driver failed to connect to a database containing columns of the Decimal128 
+data type.  
+-----------------------------------------------------------------------------------------
+| 83554     | Driver Manager     | 0202 |        | U0182 |      |             |
+A crash occurred when the Oracle (client) driver made a SQLDriverConnect call to 
+the Driver Manager. 
+-----------------------------------------------------------------------------------------
+| 79796     | MongoDB     | 0156 | B0251 | U0167 |       |      J0279         |
+The installed odbcinst.ini file contained invalid “setup=” values for the 
+Cassandra and MongoDB drivers. 
+-----------------------------------------------------------------------------------------
+| 79356     | MongoDB     | 0156 | B0251 | U0167 |       |      J0279         |
+When selecting data from a table containing driver-generated IDs, the driver 
+returned some data as NULL.
+-----------------------------------------------------------------------------------------
+| 79734     | MongoDB     | 0156 | B0251 | U0167 |       |      J0279         |
+The driver returned the following exception when fetching data using an SQL 
+Server linked server: “MongoDBjava.lang.ArrayIndexOutOfBoundsException.” 
+-----------------------------------------------------------------------------------------
+| 80605     | Driver Manager     | 0193 |        | U0174 |      |             |
+The driver manager was enhanced to optionally load driver libraries using 
+RTLD_DEEPBIND. 
+-----------------------------------------------------------------------------------------
+| 79784     | SparkSQL    | 0169  | B0259 | U0174 |       |                   |
+The driver returned the column used to partition the table twice when 
+calling SQLColumns. 
+-----------------------------------------------------------------------------------------
+| 80069     | Hive       | 0102  | B0257 | U0172 |       |                    |
+The driver returned the following error when attempting to connect to a 
+Hortonworks HDP 2.6.1 database: “General error.getOperationStatus failed.” 
+-----------------------------------------------------------------------------------------
+| 81327     | OracleWP    | 2073  | B0259 | U0174 |       |                   |
+When connected to Oracle 12.2, the application failed with the following error 
+and no additional information: “Unexpected Network Error.”
+-----------------------------------------------------------------------------------------
+| 77285     | SparkSQL   | 0160  | B0252 | U0168 |       |                    |
+When UseCurrentSchema was enabled (UseCurrentSchema=1), calling SQLTables 
+returned all the database tables, not just those in the current schema. 
+-----------------------------------------------------------------------------------------
+| 76476     | MongoDB     | 0156   | B0251 | U0167 |       |                  |
+The Schema Tool failed to launch when opening a schema map containing a 
+collection with a view.
+-----------------------------------------------------------------------------------------
+| 76758     | OracleWP    | 2064  | B0250 | U0166 |       |                   |
+The ORA-02372 and ORA-00904 errors were returned when executing an insert with 
+bulk load enabled. 
+-----------------------------------------------------------------------------------------
+| 73157     | SparkSQL   | 0148  | B0242 | U0159 |       |                    |
+After upgrading to version 8.01.0097, the driver returned a 
+java.lang.OutOfMemoryError when running certain queries.
+-----------------------------------------------------------------------------------------
+| 70254     | Hive       | 0081  | B0241 | U0158 |       |                    |
+The driver incorrectly parsed an escape character, which resulted in an error.  
+-----------------------------------------------------------------------------------------
+| 69825     | Hive       | 0081  | B0241 | U0158 |       |                    |
+The driver incorrectly parsed three single-quotation marks (‘’’) at the end of the 
+string, which resulted in an error.   
+-----------------------------------------------------------------------------------------
+| 66837     | SparkSQL   | 0144  | B0239 | U0156 |       |                    |
+The driver failed to return table metadata for Spark SQL 2.1.  
+-----------------------------------------------------------------------------------------
+| 70355     | Cassandra   | 074  | B0238 | U0156 |       |  J000203           |
+The driver inserted incorrect Date values into tables in some scenarios. 
+-----------------------------------------------------------------------------------------
+| 69609     | Cassandra   | 074  | B0238 | U0156 |       |  J000203           |
+When TransactionMode=1, the driver returned a “Socket Closed” error when calling  
+SQLSetConnectAttr(SQL_ATTR_AUTOCOMMIT=SQL_AUTOCOMMIT_ON). 
+-----------------------------------------------------------------------------------------
+| 68910     | Cassandra   | 074  | B0238 | U0156 |       |  J000203           |
+When executing an Insert statement against a table containing Counter values, the driver 
+returned the incorrect error message from the database.
+-----------------------------------------------------------------------------------------
+| 67549     | Cassandra   | 074  | B0238 | U0156 |       |  J000203           |
+The driver returned incorrect fractional digits for the TIME field when calling SQLColumns.
+-----------------------------------------------------------------------------------------
+| 66274     | Cassandra   | 069  | B0218 | U0141 |       |  J000198           |
+SQLTables failed to return a result with when specifying the table between 
+percentage signs and the schema name is not specified. 
+-----------------------------------------------------------------------------------------
+| 52301     | MongoDB     | 0125 | B0180 | U0124 |       |  J000244           |
+When importing linked tables with MS Access, the driver incorrectly returned 
+"#Deleted" values for tables that mapped the primary key as a String type.    
+-----------------------------------------------------------------------------------------
+| 45015     | MongoDB     | 0115 | B0167 | U0120 |       |  J000232           |
+When returning data from a field in a nested array, the driver incorrectly returned null.    
+-----------------------------------------------------------------------------------------
+| 40992     | MongoDB     | 0115 | B0167 | U0120 |       |  J000232           |
+A performance issue occurred when executing queries containing SUM functions and literal 
+arguments using Tableau.    
+-----------------------------------------------------------------------------------------
+| 30869     | MongoDB     | 0115 | B0167 | U0120 |       |  J000232           |
+The driver failed to map certain nested arrays that were contained in large collections.   
+-----------------------------------------------------------------------------------------
+| 45250     | SparkSQL    | 0097 | B0165 | U0120 |       |                    |
+The driver failed to return in-memory tables in when calling catalog functions. 
+-----------------------------------------------------------------------------------------
+| 41232     | SSL         | 0102 |       |       |       |                    |
+Drivers that support SSL have been upgraded to use OpenSSL version 1.0.2h. OpenSSL
+library version 1.0.2h replaces OpenSSL library 1.0.2g in the product installation.
+
+See the ODBC(64)README.TXT file for more information on the OpenSSL library upgrade.
+
+Version strings of the SSL libraries installed:
+1.0.2h - 08.01.0083
+1.0.2d - 08.00.0062
+-----------------------------------------------------------------------------------------
+| 37113     | SSL         | 0102 |       |       |       |                    |
+Drivers that support SSL have been upgraded to use OpenSSL version 1.0.2g. OpenSSL
+library version 1.0.2g replaces OpenSSL library 1.0.2f in the product installation.
+
+See the ODBC(64)README.TXT file for more information on the OpenSSL library upgrade.
+
+Version strings of the SSL libraries installed:
+1.0.2g - 08.01.0082
+1.0.2d - 08.00.0062
+-----------------------------------------------------------------------------------------
+| 26514     | MongoDB     | 0102 | B0131 | U0094 |       | 000198             |
+A table was incorrectly removed from the schema definition when executing 
+DELETE FROM <table> followed by REFRESH MAP. 
+-----------------------------------------------------------------------------------------
+| 30868     | MongoDB     | 0102 | B0131 | U0094 |       | 000198             |
+The driver returned a NullPointerException when querying virtualized tables.
+-----------------------------------------------------------------------------------------
+| 32379     | MongoDB     | 0102 | B0131 | U0094 |       | 000198             |
+The driver handled a LEFT EXCLUDING JOIN as a LEFT JOIN. 
+-----------------------------------------------------------------------------------------
+| 33161     | MongoDB     | 0102 | B0131 | U0094 |       | 000198             |
+The driver returned the following error when executing an INSERT INTO statement: 
+"ODBC MongoDB driver Client Error: Remaining data too small for BSON object." 
+-----------------------------------------------------------------------------------------
+| 31041     | SparkSQL    | 0080 | B0129 | U0093 |       |                    |
+The driver returned the incorrect database version when calling SQLGetInfo.
+-----------------------------------------------------------------------------------------
+| 31778     | SparkSQL    | 0080 | B0129 | U0093 |       |                    |
+The driver returned an error when executing a statement involving a NULL literal. 
+-----------------------------------------------------------------------------------------
+| 17967     |Branding Tool|      |       |       |       |                    |
+The installer program failed to license the Driver Manager when using a valid OEM IPE 
+key for the Spark SQL Wire Protocol driver and Driver Manager.  
+-----------------------------------------------------------------------------------------
+| 28929     | Installer   |      |       |       |       |                    |
+When installing a subset of the available drivers with an OEM license key, the installer 
+program incorrectly generated a license file with all the available drivers enabled. 
+-----------------------------------------------------------------------------------------
+| 32681     | SSL         | 0079 |       |       |       |                    |
+Drivers that support SSL have been upgraded to use OpenSSL version 1.0.2f.
+
+See the ODBC(64)README.TXT file for more information on the OpenSSL library upgrade.
+
+Version strings of the SSL libraries installed:
+1.0.2f - 08.01.0079
+1.0.2d - 08.00.0062
+[End of content]
+-----------------------------------------------------------------------------------------
+
+     Modifications Since 8.0.0
+
+The following are issues that have been resolved since Release
+8.0.0 GA (Build 0000).
+
+Issues are listed into sections, grouped by component name, 
+beginning with "All drivers," followed by individual drivers,
+the UNIX Driver Manager, and ICU issues.
+
+
+
+DRIVER, BAS, UTL, FLT, SCHEMA TOOL FAILURES RESOLVED
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+| Failure   |             | Build Number of:      
+| Number    | Driver      |Driver|  Bas  |  Utl  |  Flt  | Java jar component |
+-------------------------------------------------------------------------------
+[Start of content]
+| 16178     | Spark SQL   | 0060  | 0099  | 008  |       |                    |
+The driver returned the following error when using partition information: 
+"missing ) at 'ASC' near ')' in subquery source."
+-------------------------------------------------------------------------------
+[End of content]
+
+~~~~~~~~~~
+End of File

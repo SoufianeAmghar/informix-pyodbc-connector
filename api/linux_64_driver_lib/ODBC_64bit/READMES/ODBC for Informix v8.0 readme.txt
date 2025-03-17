@@ -1,0 +1,535 @@
+
+     README
+     Progress(R) DataDirect(R)
+     Progress DataDirect for ODBC for Informix Wire Protocol Driver 
+
+     UNIX and LINUX Platforms (32- and 64-bit) 
+     Release 8.0.2
+     September 2024
+
+***********************************************************************
+Copyright (C) 2024 Progress Software Corporation and/or its 
+subsidiaries or affiliates. All Rights Reserved.
+
+***********************************************************************
+
+This README file contains information for Progress(R) DataDirect(R)  
+for ODBC Informix(TM) Wire Protocol Driver. 
+
+This README file contains information not included in the PROGRESS 
+DATADIRECT FOR ODBC FOR INFORMIX WIRE PROTOCOL DRIVER USER'S GUIDE.
+
+
+
+CONTENTS
+
+Requirements
+Installation Directory
+Data Source and Platform Support 
+Changes Since 8.0.2 GA 
+Release 8.0.2 Features
+Configuring Data Sources
+Driver WorkAround Options
+Notes, Known Problems, and Restrictions
+Documentation
+Installed Files for the 32-bit Driver
+Installed Files for the 64-bit Driver 
+
+
+    Requirements
+
+* The installer program requires a JVM that is Java SE 11 or higher, including
+  Oracle JDK, OpenJDK, and IBM SDK (Java) distributions.
+    
+
+    Installation Directory 
+
+* The default installation directory for the 32-bit driver is:
+
+  /opt/Progress/DataDirect/ODBC
+
+* The default installation directory for the 64-bit driver is:
+
+  /opt/Progress/DataDirect/ODBC
+
+  
+    Data Source and Platform Support
+
+For the latest data source and platform support information, refer to the 
+Product Compatibility Guide: 
+https://docs.progress.com/bundle/datadirect-product-compatibility/resource/
+datadirect-product-compatibility.pdf 
+  
+  
+    Changes Since 8.0.2 GA
+
+JRE Requirement for the Installer
+---------------------------------
+The installer program now requires you to install a JRE that is Java SE 11 or
+higher before running the installer. In earlier versions, the JRE used by the
+installer program was included in the product. However, to avoid potential
+security vulnerabilities, the installer program no longer includes a JRE.
+Instead, the installer program uses the JRE in your environment to allow for
+the most secure version of a JRE to be used.
+ 
+Notes:
+* This change does not affect the JVM requirements for the driver. For the latest 
+  driver requirements, refer to the Product Compatibility Guide:
+  https://docs.progress.com/bundle/datadirect-product-compatibility/resource/
+  datadirect-product-compatibility.pdf
+* The installer program cannot remove the already installed JRE files from the 
+  install directory automatically. Remove them manually.
+
+ICU Library Upgrade (74.1) for AIX Platforms
+--------------------------------------------
+For AIX platforms, the ICU library files that are installed with the
+product have been upgraded to version 74.1. As a part of this upgrade, 
+the ICU library file names have changed for AIX platforms:
+* For the 32-bit driver: From libivicu28.a to libivicu.a
+* For the 64-bit driver: From libddicu28.a to libddicu.a 
+
+Notes:
+* This upgrade does not apply to the other UNIX platforms.
+* This upgrade is available starting in build 08.02.1072 of the ICU 
+  library files.
+
+ICU Library Upgrade (74.1) for Linux Platforms
+----------------------------------------------
+For Linux platforms, the ICU library files that are installed with the
+product have been upgraded to version 74.1. As a part of this upgrade, 
+the ICU library file names have changed for Linux platforms: 
+* For the 32-bit driver: From libivicu28.so to libivicu.so
+* For the 64-bit driver: From libddicu28.so to libddicu.so
+
+Note:
+* This upgrade does not apply to UNIX platforms.
+* This upgrade is available starting in build 08.02.0965 of the ICU 
+  library files.
+
+ODBC Cursor Library
+-------------------
+The product package no longer includes the ODBC Cursor library file 
+(odbccurs.so) because it has some known security vulnerabilities that 
+could potentially expose you to security risks.
+
+Note: The installer program cannot remove the ODBC Cursor library file 
+automatically while installing a new version of the driver. Remove it 
+manually.
+
+Changes to Installation of Non-Essential Components 
+-----------------------------------------------------
+The installer program has been updated to no longer install common components 
+for drivers that do not use them. As a result, the installer program no longer 
+installs the following common components for the Informix Wire Protocol
+driver: 
+
+* OpenSSL library files, such as ivopenssl30.so, ddopenssl30.so, fips.so, 
+  and openssl.cnf.
+* Curl library files, such as libivcurl28.so and libddcurl28.so. 
+
+If the files are not used by any other DataDirect driver on your machine, you 
+can safely remove them from existing product directories.
+	
+    
+    Release 8.0.2 Features
+
+Enhancements
+------------
+* The driver has been enhanced to include timestamp in the internal packet 
+  logs by default. If you want to disable the timestamp logging in packet 
+  logs, set PacketLoggingOptions=1. The internal packet logging is not 
+  enabled by default. To enable it, set EnablePacketLogging=1.
+
+* The Driver Manager for UNIX/Linux has been enhanced to support setting the 
+  Unicode encoding type for applications on a per connection basis. By passing 
+  a value for the SQL_ATTR_APP_UNICODE_TYPE attribute using SQLSetConnectAttr, 
+  your application can specify the encoding at connection. This allows your 
+  application to pass both UTF-8 and UTF-16 encoded strings with a single 
+  environment handle. The valid values for the SQL_ATTR_APP_UNICODE_TYPE 
+  attribute are SQL_DD_CP_UTF8 and SQL_DD_CP_UTF16. The default value is 
+  SQL_DD_CP_UTF8.
+
+* A Password Encryption Tool, called ddencpwd, is now included with the
+  product package. It encrypts passwords for secure handling in connection
+  strings and odbc.ini files. At connection, the driver decrypts these
+  passwords and passes them to the data source as required. Refer to the
+  user's guide for details.
+
+Changed Behavior
+----------------
+* Support has been deprecated for the following versions of Informix:
+  - Informix 11.0 and higher
+  - Informix 10.0 and higher
+  - Informix 9.2 and higher
+
+ 
+    Configuring Data Sources
+
+Data sources are stored in the system information file (typically, 
+odbc.ini). For details on configuring this file, see the PROGRESS DATADIRECT
+FOR ODBC FOR INFORMIX WIRE PROTOCOL DRIVER USER'S GUIDE.
+ 
+ 
+    Driver WorkAround Options
+
+Progress DataDirect has included non-standard connection options (workarounds)
+for the driver that enable you to take full advantage of packaged ODBC-enabled
+applications requiring non-standard or extended behavior. Refer to the chapter
+"WorkAround options" in THE PROGRESS DATADIRECT FOR ODBC DRIVERS REFERENCE for a
+description of these options.
+
+
+     Notes, Known Issues, and Restrictions
+
+Specifying values for the same connection option multiple times
+--------------------------------------------------------------- 
+The driver does not support specifying values for the same connection 
+option multiple times in a connection string or DSN. If a value is 
+specified using the same attribute multiple times or using both 
+long and short attributes, the connection may fail or the driver may 
+not behave as intended.
+
+ODBC Development on UNIX and Linux Platforms
+--------------------------------------------
+All of the Release 8.0 Core Components (header files, etc.) needed for 
+development of ODBC applications on UNIX and Linux are installed into 
+the /include directory created by the product installer.
+
+Please read the notices.txt file in the installation directory for 
+licensing information regarding the ODBC Core Components. Contact your 
+Progress DataDirect representative if you have any questions.
+
+Developers using programming languages other than C++:
+The DataDirect ODBC Driver Manager is a C++ shared library. The ODBC 
+Driver Manager can be used with any language that supports loading a 
+C++ shared library; however, if you are using a programming language 
+other than C++, you must take additional steps to ensure that the C++ 
+libraries are initialized properly when loaded. If you are not using 
+C++, consult your compiler documentation for instructions on using C++ 
+shared libraries with your application.
+
+LANG Environment Setting on UNIX and Linux Platforms
+----------------------------------------------------
+A default installation of the product on UNIX and Linux assumes that 
+the value of the LANG environment setting is en_US. If your locale is 
+not set to en_US, the drivers may not return error messages properly. 
+In this case, you must create a symbolic link in the 
+<Install_Dir>/locale directory that has the same value as the LANG 
+environment setting. This link must point to the 
+<Install_Dir>/locale/en_US directory.
+
+SQLColAttribute(s)
+------------------
+The column attributes 1001 and 1002, which were assigned as DataDirect- 
+specific attributes, were inadvertently used as system attributes by
+the Microsoft 3.0 ODBC implementation. Applications using those 
+attributes must now use 1901 and 1902, respectively.
+ 
+SQL_C_NUMERIC
+-------------
+Because of inconsistencies in the ODBC specification, users attempting 
+to use SQL_C_NUMERIC parameters must set the precision and scale values 
+of the corresponding structure and the descriptor fields in the 
+Application Parameter Descriptor.
+ 
+For Developers Using IIS
+------------------------
+One of the most common connectivity issues encountered while using IIS 
+(Microsoft's Internet Information Server) concerns the use and settings 
+of the account permissions. If you encounter problems using DataDirect 
+drivers with an IIS server, refer to KnowledgeBase document number 4274 
+on the Progress DataDirect web site:
+
+http://knowledgebase.datadirect.com.
+
+
+     Documentation
+
+PROGRESS DATADIRECT FOR ODBC FOR INFORMIX WIRE PROTOCOL DRIVER 
+DOCUMENTATION SET
+--------------------------------------------------------------
+The driver documentation set is available from the Progress Information Hub:
+
+https://docs.progress.com/category/datadirect-ibm-informix
+
+You can access the online help system directly via the HTML redirect in the
+installation Help directory.
+
+
+    Installed Files for the 32-bit Driver
+
+This file list assumes a full installation of the 32-bit driver and 
+documentation.
+
+The installer copies the following files and subdirectories to the 
+product installation directory, by default:
+
+/opt/Progress/DataDirect/ODBC:
+
+/<install_dir>/:
+----------------
+IVODBC.LIC                       DataDirect license file
+license.txt                      Progress DataDirect license agreement
+odbc.csh                         Setup script for C shell
+odbc.ini                         Sample odbc.ini file
+odbcinst.ini                     Sample odbcinst.ini file
+odbc.sh                          Setup script for Bourne shell
+
+
+/bin:
+-----
+ivtestlib                        Test application to check that required 
+                                 libraries are present and loadable
+
+
+/FIXES/:
+--------
+fixes8.0.txt                     List of fixes since last release
+
+                                 
+/help:
+------ 
+*.html                           HTML redirects to online connector help systems
+                                 and documentation resources
+
+
+/include:
+---------
+odbcinst.h                       Include files
+qesqlext.h
+sql.h
+sqlext.h
+sqltypes.h
+sqlucode.h
+sqlunx.h
+
+
+/install/:
+---------
+*.*                              Files associated with the installer program
+
+
+/lib:
+-----
+ivifcl28.so                      Informix WP driver
+ivtrc28.so                       Progress DataDirect trace library
+libivicu.a                       Unicode conversion tables for AIX platforms
+libivicu.so                      Unicode conversion tables for Linux platforms
+libivicu28.so                    Unicode conversion tables for all UNIX 
+                                 platforms except for AIX
+libodbc.so                       ODBC Driver Manager [.a on AIX]
+libodbcinst.so                   ODBC Installer [.a on AIX]                     
+
+/locale/en_US/LC_MESSAGES:
+--------------------------
+ivifcl28.mo                      Informix WP driver message file
+ivifcl28.po                      Informix WP driver message file source
+odbc.m                           ODBC Driver Manager message file
+odbc.po                          ODBC Driver Manager message source
+
+
+/NOTICES:
+---------
+ODBC for Informix v8.0
+notices.txt                      Third-party vendor license agreements  
+
+
+/READMES:
+---------
+ODBC for Informix v8.0
+readme.txt                       This file
+
+
+/samples/bulk/:
+---------------
+bulk                             Bulk application
+bulk.c                           Bulk example source
+bulk.mak                         Bulk example make file
+bulk.txt                         Bulk example description
+ddlogging.properties             Log configuration file for the
+                                 Informix driver
+
+
+/samples/bulkstrm/:
+-------------------
+bulk.cpp                         Bulk streaming example source
+bulk.hpp                         Bulk streaming example header
+bulkstrm                         Bulk streaming example application
+bulkstrm.txt                     Bulk streaming example description
+main.cpp                         Bulk streaming example source
+msgprintf.hpp                    Bulk streaming example header
+streambulk.mak                   Bulk streaming example make file
+ddlogging.properties             Log configuration file for the
+                                 Informix driver
+
+
+/samples/example/:
+------------------
+example                          Example application
+example.c                        Example source
+example.h                        Example header
+example.mak                      Example make file
+ddlogging.properties             Log configuration file for the
+                                 Informix driver
+
+
+/samples/trn/:
+--------------
+makefile                         Translation Library example make file
+readme.trn                       Translation Library example description 
+translat.c                       Translation Library example source file
+
+
+/tools:
+-------
+ddencpwd                         Password Encryption Tool
+ddextu                           License Extender utility
+ddprocinfo                       Processor Information utility
+
+
+/uninstall/:
+------------
+*.*                              Files used to uninstall the product
+
+
+    Installed Files for the 64-bit Driver
+
+This file list assumes a full installation of the 64-bit driver and 
+documentation. 
+
+The installer copies the following files and subdirectories to the 
+product installation directory, by default:
+
+/opt/Progress/DataDirect/ODBC_64bit:
+
+/<install_dir>/:
+----------------
+DDODBC.LIC                       DataDirect license file
+license.txt                      Progress DataDirect license agreement
+odbc.csh                         Setup script for C shell
+odbc.ini                         Sample odbc.ini file
+odbcinst.ini                     Sample odbcinst.ini file
+odbc.sh                          Setup script for Bourne shell
+
+
+/bin:
+-----
+ddtestlib                        Test application to check that required 
+                                 libraries are present and loadable
+
+
+/FIXES/:
+--------
+fixes8.0.txt                     List of fixes since last release
+
+
+/help:
+------ 
+*.html                           HTML redirects to online connector help systems
+                                 and documentation resources
+
+
+/include:
+---------
+odbcinst.h                       Include files
+qesqlext.h
+sql.h
+sqlext.h
+sqltypes.h
+sqlucode.h
+sqlunx.h
+
+
+/install/:
+---------
+*.*                              Files associated with the installer program
+
+
+/lib:
+-----
+ddifcl28.so                      Informix WP driver  
+ddtrc28.so                       Progress DataDirect trace library
+libddicu.a                       Unicode conversion tables for AIX platforms
+libddicu.so                      Unicode conversion tables for Linux platforms
+libddicu28.so                    Unicode conversion tables for all UNIX 
+                                 platforms except for AIX
+libodbc.so                       ODBC Driver Manager [.a on AIX]
+libodbcinst.so                   ODBC Installer [.a on AIX]
+
+
+/locale/en_US/LC_MESSAGES:
+--------------------------
+ddifcl28.mo                      Informix WP driver message file
+ddifcl28.po                      Informix WP driver message file source
+odbc.m                           ODBC Driver Manager message file
+odbc.po                          ODBC Driver Manager message source
+
+
+/NOTICES/:
+---------
+ODBC for Informix v8.0
+notices.txt                      Third-party vendor license agreements  
+
+
+/READMES/:
+---------
+ODBC for Informix v8.0
+readme.txt                       This file
+
+
+/samples/bulk/:
+---------------
+bulk                             Bulk application
+bulk.c                           Bulk example source
+bulk.mak                         Bulk example make file
+bulk.txt                         Bulk example description
+ddlogging.properties             Log configuration file for the
+                                 Informix driver
+
+
+/samples/bulkstrm/:
+-------------------
+bulk.cpp                         Bulk streaming example source
+bulk.hpp                         Bulk streaming example header
+bulkstrm                         Bulk streaming example application
+bulkstrm.txt                     Bulk streaming example description
+main.cpp                         Bulk streaming example source
+msgprintf.hpp                    Bulk streaming example header
+streambulk.mak                   Bulk streaming example make file
+ddlogging.properties             Log configuration file for the
+                                 Informix driver
+
+
+/samples/example/:
+-------------------
+example                          Example application
+example.c                        Example source
+example.h                        Example header
+example.mak                      Example make file
+ddlogging.properties             Log configuration file for the
+                                 Informix driver
+
+
+/samples/trn/:
+--------------
+makefile                         Translation Library example make file
+readme.trn                       Translation Library example description 
+translat.c                       Translation Library example source file
+
+
+/tools:
+-------
+ddencpwd                         Password Encryption Tool
+ddextu                           License Extender utility
+ddprocinfo                       Processor Information utility
+
+   
+/uninstall/:
+------------
+*.*                              Files used to uninstall the product
+
+   
+~~~~~~~~~~~~~~~~~
+September 2024
+End of README
+

@@ -1,0 +1,9 @@
+The file translat.c is an example of how to write a translation shared 
+library.  It does not perform any actual translations on UNIX platforms.  
+(The code is common-sourced across several platforms and uses the 
+Microsoft AnsiToOem and OemToAnsi functions.  These functions are 
+meaningless for UNIX and have been converted to straight string copy 
+routines.)  
+
+The provided makefile demonstrates the linker switches that must be used
+to build the shared library translation module.  

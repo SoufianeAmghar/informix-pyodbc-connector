@@ -1,10 +1,14 @@
 # informix_connection.py
-
 import pyodbc
+import os
+
+# Resolve the relative path to an absolute path
+driver_path = os.path.abspath("linux_64_driver_lib/ODBC_64bit/lib/ddifcl28.so")
+print(driver_path)
 
 # Connection string using the driver name
 conn_str = (
-        "DRIVER=/home/soufiane/Progress/DataDirect/ODBC_64bit/lib/ddifcl28.so;"
+        f"DRIVER={driver_path};"
         "DATABASE=cmr;"
         "HOSTNAME=localhost;"
         "PORT=9088;"

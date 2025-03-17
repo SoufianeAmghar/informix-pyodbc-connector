@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registry install_date="2025-03-17 13:17:12" version="1.1" last_modified="2025-03-17 13:17:46">
+	<products>
+		<product name="Progress DataDirect for ODBC - 64 bit" id="2728728f-1f3b-11b2-9a65-d94ce8c11052" upgrade_id="c1d333d2-1f0c-11b2-b181-c0e541806425" version="3.0.0.0" copyright="2024" info_url="" support_url="" location="/home/soufiane/Progress/DataDirect/ODBC_64bit" last_modified="2025-03-17 13:17:12">
+		<![CDATA[]]>
+			<vendor name="Progress Software Corporation" id="323906ab-1ee8-11b2-85f6-8e74c521873d" home_page="http://www.progress.com/" email=""/>
+			<feature short_name="Common" name="Common" last_modified="2025-03-17 13:17:12">
+			<![CDATA[This installs the application feature.]]>
+				<component ref_id="e01c7af1-1f1e-11b2-a635-98bef360ca96" version="3.0.0.0" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/uninstall_ODBC"/>
+				<component ref_id="e01c5cf5-1f1e-11b2-a635-98bef360ca96" version="3.0.0.0" location="/home/soufiane/Processor Information Utility"/>
+			</feature>
+			<feature short_name="Drivers" name="Drivers" last_modified="2025-03-17 13:17:12">
+			<![CDATA[<Enter Product Feature description here -- do not forget to assign this Feature to desired Install Sets>]]>
+				<component ref_id="e01c7af1-1f1e-11b2-a635-98bef360ca96" version="3.0.0.0" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/uninstall_ODBC"/>
+				<component ref_id="e01c6f1e-1f1e-11b2-a635-98bef360ca96" version="3.0.0.0" location="/home/soufiane/ODBC Administrator"/>
+			</feature>
+		</product>
+	</products>
+	<components>
+		<component id="e01c6f1e-1f1e-11b2-a635-98bef360ca96" version="3.0.0.0" name="drivers" location="/home/soufiane/ODBC Administrator" vendor="Progress Software Corporation">
+			<resource keyfile="false" name="install" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/install" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="uninstall" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="3c76a44d-1f17-11b2-9c56-8e7b4c9eeb4f" location="com.progress.datadirect.odbc.action.VerifyOverwriteUninstall " type="customcode" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/informix" type="mergemodule" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="makelic" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/./tools/makelic" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="3c76a44d-1f17-11b2-9c56-8e7b4c9eeb4f" location="com.progress.datadirect.odbc.action.WriteLicenseAndBrandDrivers " type="customcode" uninstall="true" rollbackEnabledCancel="true"/>
+		</component>
+		<component id="e01c7af1-1f1e-11b2-a635-98bef360ca96" version="3.0.0.0" name="InstallAnywhere Uninstall Component" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/uninstall_ODBC" vendor="Progress Software Corporation">
+			<resource keyfile="false" name="Progress_DataDirect_for_ODBC_-_64_bit_Install_03_17_2025_13_17_12.log" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/install/logs/Progress_DataDirect_for_ODBC_-_64_bit_Install_03_17_2025_13_17_12.log" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="Progress" location="/home/soufiane/Progress" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="DataDirect" location="/home/soufiane/Progress/DataDirect" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="ODBC_64bit" location="/home/soufiane/Progress/DataDirect/ODBC_64bit" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="uninstall" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="uninstaller.jar" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/uninstaller.jar" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="true" name="uninstall_ODBC" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/uninstall_ODBC" type="executable" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="uninstall_ODBC.lax" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/uninstall_ODBC.lax" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name=".com.zerog.registry.xml" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/uninstall/.com.zerog.registry.xml" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+		</component>
+		<component id="e01c5cf5-1f1e-11b2-a635-98bef360ca96" version="3.0.0.0" name="common" location="/home/soufiane/Processor Information Utility" vendor="Progress Software Corporation">
+			<resource keyfile="false" name="install" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/install" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="logs" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/install/logs" type="directory" uninstall="true" rollbackEnabledCancel="true">
+			<![CDATA[false]]>
+			</resource>
+			<resource keyfile="false" name="" location="com.progress.installer.ia.action.ddinstallregistryxml.DDInstallRegistryXMLAction " type="customcode" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="" location="" type="mergemodule" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="" location="" type="mergemodule" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="odbc.sh" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/odbc.sh" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="odbc.csh" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/odbc.csh" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+			<resource keyfile="false" name="DataDirect Connector Documentation Help.html" location="/home/soufiane/Progress/DataDirect/ODBC_64bit/help/DataDirect Connector Documentation Help.html" type="file" uninstall="true" rollbackEnabledCancel="true"/>
+		</component>
+	</components>
+</registry>
