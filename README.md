@@ -18,6 +18,8 @@ First, you will need to install the followings:
 
 2- Follow their documentation to setup the driver for your operating system
 
+3- Add the driver file inside a directory similar to linux_64_driver_lib/ODBC_64bit/informix_lib and update .env with the correct driver path
+
 ### For Linux users, make sure you run the following commands :
 
 1- Install the different requirements for the driver to start from this website :
